@@ -10,6 +10,8 @@ import javax.servlet.http.HttpSession;
 
 import com.jmd.test.jsf.LoginBean;
 
+import com.services.credentials.profiles.UserProfile;
+
 /**
  * @author thomas.foret
  *
@@ -21,9 +23,44 @@ public class CredentialsManager {
 		AppUser currentUser = new AppUser(session.getId(), user.getNom(),user.getMdp());
 		ArrayList<UserGroup> currentGroups = loadUserGroups(currentUser);
 		currentUser.setUserGroups(currentGroups);
+		ArrayList<UserProfile> userProfiles = loadUserProfile(currentUser);
+		currentUser.setUserProfiles(userProfiles);
 		
-		return null;
+		ArrayList<SelectItem> _res = new ArrayList<SelectItem>();
 		
+		for (UserProfile userProfile : userProfiles) {
+			
+			for(ResourceEntry resourceE : userProfile.getResources()){
+				SelectItem _res1 = new SelectItem(resourceE.getPath(), resourceE.getDesc(), resourceE.getDesc());
+				_res.add(_res1);	
+			}
+			
+			
+		}
+			
+		return _res;
+		
+	}
+
+	/**
+	 * Find out the user's profiles
+	 * It's used to build the menu based on the credentials
+	 * @param currentUser
+	 * @return
+	 */
+	private static ArrayList<UserProfile> loadUserProfile(AppUser currentUser) {
+		// TODO Find out from the DB the profiles of the current user
+		//
+		ArrayList<UserProfile> _res = new ArrayList<UserProfile>();
+		if( currentUser.getLoginName().equalsIgnoreCase("Admin")){
+			UserProfile profile1 = UserProfile.getAdminProfile();
+			_res.add(profile1);
+		}else{
+			UserProfile profile1 = UserProfile.getDefaultProfile();
+			_res.add(profile1);
+		}
+		
+		return _res;
 	}
 
 	private static ArrayList<UserGroup> loadUserGroups(AppUser currentUser) {

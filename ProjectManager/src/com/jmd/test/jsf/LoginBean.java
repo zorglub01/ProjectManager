@@ -57,10 +57,8 @@ public class LoginBean {
 	  System.out.println(this.getNom() +"/" + this.getMdp() );
 	  FacesContext fCtx = FacesContext.getCurrentInstance();
 	  HttpSession session = (HttpSession )fCtx.getExternalContext().getSession(true);
-	  CredentialsManager.getMenuEntry(session,this);
-	  
-	  this.addMenuItems(new SelectItem("credAdmin", "Admin menu", "Admin menu for cred"));
-	  this.addMenuItems(new SelectItem("credPM", "Project menu", "Project Management"));
+	  this.menuItems = CredentialsManager.getMenuEntry(session,this);
+	  	  
 	  
 	  return "login";
   }
