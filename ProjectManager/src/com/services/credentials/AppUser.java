@@ -5,6 +5,8 @@ package com.services.credentials;
 
 import java.util.ArrayList;
 
+import com.services.credentials.profiles.UserProfile;
+
 /**
  * @author thomas.foret
  *
@@ -18,6 +20,7 @@ public class AppUser {
 	private Integer userid;
 	
 	private ArrayList<UserGroup> userGroups;
+	private ArrayList<UserProfile> userProfile;
 	
 	private AppUser(){
 		
@@ -29,6 +32,14 @@ public class AppUser {
 		this.setLoginPwd(loginPwd);
 	}
 	
+	public Integer getUserid() {
+		return userid;
+	}
+
+	public void setUserid(Integer userid) {
+		this.userid = userid;
+	}
+
 	/**
 	 * @return the loginName
 	 */
@@ -91,6 +102,24 @@ public class AppUser {
 
 	public void setUserGroups(ArrayList<UserGroup> currentGroups) {
 		this.userGroups = currentGroups;
+		
+	}
+
+	
+
+	public void setUserProfiles(ArrayList<UserProfile> userProfiles) {
+		// TODO Auto-generated method stub
+		this.userProfile = userProfiles;
+		
+	}
+	
+	
+	/**
+	 * @return
+	 */
+	public ArrayList<UserProfile> getUserProfiles() {
+		// TODO Auto-generated method stub
+		return this.userProfile;
 		
 	}
 

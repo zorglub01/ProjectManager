@@ -36,26 +36,19 @@
 <f:view>
 <p>HELLO WELCOM IN THE APP</p>
 
-<h:selectManyListbox >
-  <f:selectItems value="#{login.menuItems}"/>
-</h:selectManyListbox>
+<h:outputText value="#{login.nom }"/>
+
+
 
 <div id="tabs">
-  <ul>
-  	
+  <ul>	
   	<c:forEach items="#{login.menuItems}" var="menuEntry">
-  	<li><h:outputLink value="#{menuEntry.value}.faces" ><h:outputText value="#{menuEntry.label }"></h:outputText>
-  	</h:outputLink>
-  	</li>
+  		<li><h:outputLink value="#{menuEntry.value}" ><h:outputText value="#{menuEntry.label }"/></h:outputLink></li>
   	</c:forEach>
-    <li><a href="#tabs-1">Preloaded</a></li>
-    <li><a href="ajax/content1.html">Tab 1</a></li>
-    <li><a href="ajax/content2.html">Tab 2</a></li>
-    <li><a href="ajax/content3-slow.php">Tab 3 (slow)</a></li>
-    <li><a href="ajax/content4-broken.php">Tab 4 (broken)</a></li>
+    <li><a href="#tabs-1">About</a></li>    
   </ul>
   <div id="tabs-1">
-    <p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
+    <p>About page</p>
   </div>
 </div>
 
