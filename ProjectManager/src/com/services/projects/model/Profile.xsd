@@ -4,35 +4,37 @@
 	xmlns:tns="http://www.example.org/Profile"
 	elementFormDefault="qualified" xmlns:pref="http://www.example.org/PMOTask">
 
-	<import schemaLocation="PMOTask.xsd" namespace="http://www.example.org/PMOTask"></import>
-	<complexType name="profile">
+	<element name="Profile">
+	<complexType>
+		<choice>
 		<sequence>
 			<element name="Resources" type="tns:resource" maxOccurs="1"
 				minOccurs="1">
 			</element>
 			<element name="Description" type="string"></element>
 		</sequence>
+		</choice>
 		<attribute name="KeyId" type="string"></attribute>
 		<attribute name="Name" type="string"></attribute>
 	</complexType>
+	</element>
 
 
+	<complexType name="URI">
+		<choice>
+			<sequence>
+				<element name="Credentials" type="tns:credentials"
+					maxOccurs="4" minOccurs="1">
+				</element>
+				<element name="Path" type="string" maxOccurs="1"
+					minOccurs="1">
+				</element>
+				<element name="Description" type="string"></element>
+			</sequence>
+		</choice>
+	</complexType>
 
-
-    <complexType name="URI">
-    	<sequence>
-    		<element name="Credentials" type="tns:credentials"
-    			maxOccurs="4" minOccurs="1">
-    		</element>
-    		<element name="Path" type="string" maxOccurs="1"
-    			minOccurs="1">
-    		</element>
-    		<element name="Description" type="string"></element>
-    	</sequence>
-    </complexType>
-
-    <element name="Profile" type="tns:profile"></element>
-
+	
     <simpleType name="right">
     	<restriction base="string">
     		<enumeration value="CREATE"></enumeration>
