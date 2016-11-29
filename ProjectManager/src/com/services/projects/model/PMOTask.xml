@@ -11,4 +11,5 @@
       <tns:endDate>2016-11-24</tns:endDate>
     </tns:estimate>
   </tns:Metric>
+  <tns:Status tns:currentState="New" upDate="2016-11-20"/>
 </tns:Task>

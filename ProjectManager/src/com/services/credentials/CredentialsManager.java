@@ -31,7 +31,8 @@ public class CredentialsManager {
 		for (UserProfile userProfile : userProfiles) {
 			
 			for(ResourceEntry resourceE : userProfile.getResources()){
-				SelectItem _res1 = new SelectItem(resourceE.getPath(), resourceE.getDesc(), resourceE.getDesc());
+				String _javaScript="$(\"#_"+ resourceE.getPath()+"\").load(\""+resourceE.getPath()+"\");";
+				SelectItem _res1 = new SelectItem(resourceE.getPath(), resourceE.getDesc(), _javaScript);
 				_res.add(_res1);	
 			}
 			

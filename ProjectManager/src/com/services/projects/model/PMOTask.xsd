@@ -1,46 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/PMOTask" xmlns:tns="http://www.example.org/PMOTask" elementFormDefault="qualified">
-    <element name="Task">
-    <complexType>
-    	<sequence>
-    		<element name="Name" type="string" maxOccurs="1"
-    			minOccurs="1">
-    		</element>
-    		<element ref="tns:Description" maxOccurs="1"
-    			minOccurs="0">
-    		</element>
-    		<element ref="tns:Metric"></element>
-    	</sequence>
-    	<attribute name="Id" type="string" use="required" />
-    </complexType>
-    </element>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.example.org/PMOTask"
+	xmlns:tns="http://www.example.org/PMOTask"
+	elementFormDefault="qualified">
+	<import></import>
+	<element name="Task">
+		<complexType>
+			<sequence>
+				<element name="Name" type="string" maxOccurs="1"
+					minOccurs="1">
+				</element>
+				<element ref="tns:Description" maxOccurs="1"
+					minOccurs="1">
+				</element>
+				<element ref="tns:Metric" maxOccurs="1" minOccurs="1"></element>
+				<element name="Status" type="tns:status" maxOccurs="1" minOccurs="1"></element>
+			</sequence>
+			<attribute name="Id" type="string" use="required" />
+		</complexType>
+	</element>
 
-    <element name="Metric">
-    <complexType>
-    	<sequence>
-    		<element ref="tns:Description"></element>
-    		<element name="estimate" type="tns:wl"></element>
-    	</sequence>
-    	<attribute ref="tns:keyId"></attribute>
-    </complexType>
-    </element>
-
-
-
-    <element name="Description" type="string"></element>
-
-    <attribute name="keyId" type="string" default="0"></attribute>
-
+	<element name="Metric">
+		<complexType>
+			<sequence>
+				<element ref="tns:Description"></element>
+				<element name="estimate" type="tns:wl"></element>
+			</sequence>
+			<attribute ref="tns:keyId"></attribute>
+		</complexType>
+	</element>
 
 
 
-    <complexType name="wl">
-    	<sequence>
-    		<element name="wlSup" type="int"></element>
-    		<element name="wlInf" type="int"></element>
-    		<element name="startDate" type="date"></element>
-    		<element name="endDate" type="date"></element>
-    	</sequence>
-    </complexType>
+	<element name="Description" type="string"></element>
 
+	<attribute name="keyId" type="string" default="0"></attribute>
+
+
+
+
+	<complexType name="wl">
+		<sequence>
+			<element name="wlSup" type="int"></element>
+			<element name="wlInf" type="int"></element>
+			<element name="startDate" type="date"></element>
+			<element name="endDate" type="date"></element>
+		</sequence>
+	</complexType>
+
+
+
+	<simpleType name="state">
+		<restriction base="string">
+			<enumeration value="New"></enumeration>
+			<enumeration value="Assigned"></enumeration>
+			<enumeration value="InProgress"></enumeration>
+			<enumeration value="Closed"></enumeration>
+			<enumeration value="Rejected"></enumeration>
+			<enumeration value="Suspended"></enumeration>
+		</restriction>
+	</simpleType>
+
+
+	<complexType name="status">
+		<attribute name="currentState" type="tns:state" default="New"
+			form="qualified">
+		</attribute>
+		<attribute name="upDate" type="date"></attribute>
+	</complexType>
 </schema>

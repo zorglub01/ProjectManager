@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:Profile KeyId="" Name="" xmlns:tns="http://www.example.org/Profile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.example.org/Profile Profile.xsd ">
+  
+  <tns:Resources>
+    <tns:resource>
+      <tns:Credentials>
+        <tns:rights>CREATE</tns:rights>
+      </tns:Credentials>
+      <tns:Path>tns:Path</tns:Path>
+      <tns:Description>tns:Description</tns:Description>
+    </tns:resource>
+  </tns:Resources>
+  <tns:Description>tns:Description</tns:Description>
+</tns:Profile>
