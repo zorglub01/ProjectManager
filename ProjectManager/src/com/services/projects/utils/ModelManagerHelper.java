@@ -12,24 +12,54 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import com.services.projects.model.Profile;
+import com.services.projects.model.Project;
 import com.services.projects.model.Task;
 
 /**
  * @author thomas.foret
  *
  */
-public class TaskManagerHelper {
+public class ModelManagerHelper{
+	
+	public static <T> void saveModel(T t) throws JAXBException{
+		JAXBContext jaxbContext = JAXBContext.newInstance(t.getClass());
+		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		jaxbMarshaller.marshal(t,System.out);
+	}
 	
 	
-	public static void main(String args[]){
-		URL commonXmlUrl = ClassLoader.getSystemResource("com/services/projects/model/PMOTask.xml");
+	public static <T> T loadModel(File _xmlFile, Class<T> clazz) throws JAXBException{
+		JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
+		Unmarshaller jaxbUnMarshaller = jaxbContext.createUnmarshaller();
 		
+		@SuppressWarnings("unchecked")
+		T _res = (T)jaxbUnMarshaller.unmarshal(_xmlFile);
+		return _res ;
+		
+	}
+	
+	
+	
+	
+
+	public static void main(String args[]){
+		URL taskXmlUrl = ClassLoader.getSystemResource("com/services/projects/model/PMOTask.xml");
+		URL profileXmlUrl = ClassLoader.getSystemResource("com/services/projects/model/Profile.xml");
+		URL pmoXmlUrl = ClassLoader.getSystemResource("com/services/projects/model/PMOProject1.xml");
 		try {
-			File _testFile = new File(commonXmlUrl.toURI());
-			Task _res = getInstance(_testFile);
-			System.out.println(_res);
+			File _testFile = new File(taskXmlUrl.toURI());									
+			Task _res = ModelManagerHelper.<Task>loadModel(_testFile, Task.class);
+			System.out.println(_res);			
+			ModelManagerHelper.<Task>saveModel(_res);
 			
-			saveInstance(_res);
+			File _testFile1 = new File(profileXmlUrl.toURI());									
+			Profile _res1 = ModelManagerHelper.<Profile>loadModel(_testFile1, Profile.class);
+			System.out.println(_res1);			
+			ModelManagerHelper.<Profile>saveModel(_res1);
+			
+			
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,23 +67,26 @@ public class TaskManagerHelper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	public static Task getInstance(File _xmlFile) throws JAXBException{
 		
-		JAXBContext jaxbContext = JAXBContext.newInstance(Task.class);
-		Unmarshaller jaxbUnMarshaller = jaxbContext.createUnmarshaller();
+		try {
+			File _testFile2 = new File(pmoXmlUrl.toURI());									
+			Project _res2 = ModelManagerHelper.<Project>loadModel(_testFile2, Project.class);
+			System.out.println(_res2);			
+			ModelManagerHelper.<Project>saveModel(_res2);
+
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		
-		Task _res = (Task)jaxbUnMarshaller.unmarshal(_xmlFile);
-		return _res ;
-	}
-	
-	public static void saveInstance(Task instance) throws JAXBException{
 		
-		JAXBContext jaxbContext = JAXBContext.newInstance(Task.class);
-		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		jaxbMarshaller.marshal(instance,System.out);
+		
+		
+		
 		
 	}
 	

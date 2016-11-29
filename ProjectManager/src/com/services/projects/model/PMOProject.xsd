@@ -14,9 +14,9 @@
     		<element name="Name" type="string" maxOccurs="1"
     			minOccurs="1">
     		</element>
-    		<element name="TaskList" type="tns:tasks"></element>
+    		<element name="Phases" type="tns:phases" maxOccurs="1" minOccurs="1"></element>
     	</sequence>
-    	<attribute ref="pref:keyId"></attribute>
+    	<attribute ref="pref:keyId" default="0"></attribute>
     	<attribute name="shortName" type="string" default="myProject"></attribute>
     </complexType>
     </element>
@@ -25,5 +25,25 @@
     	<sequence>
     		<element ref="pref:Task" maxOccurs="unbounded" minOccurs="0"></element>
     	</sequence>
+    </complexType>
+
+
+    
+    <complexType name="sprint">
+    	<sequence>
+    		<element name="name" type="string"></element>
+    		<element name="startDate" type="date"></element>
+    		<element name="endDate" type="date"></element>
+    		<element name="taskList" type="tns:tasks" maxOccurs="unbounded" minOccurs="0"></element>
+    	</sequence>
+    	<attribute ref="pref:keyId"></attribute>
+    </complexType>
+
+
+    <complexType name="phases">
+        <sequence>
+        	<element name="phase" type="tns:sprint" maxOccurs="unbounded" minOccurs="1"></element>
+        </sequence>
+        
     </complexType>
 </schema>

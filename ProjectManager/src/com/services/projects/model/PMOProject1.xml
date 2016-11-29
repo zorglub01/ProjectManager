@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:Project tns1:keyId="0"
+	xmlns:tns="http://www.example.org/PMOProject" xmlns:tns1="http://www.example.org/PMOTask"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.example.org/PMOProject PMOProject.xsd ">
+	<tns1:Description>tns1:Description</tns1:Description>
+	<tns:Name>tns:Name</tns:Name>
+	<tns:Phases>
+		<tns:phase tns1:keyId="">
+			<tns:name>tns:name</tns:name>
+			<tns:startDate>2001-01-01</tns:startDate>
+			<tns:endDate>2001-01-01</tns:endDate>
+			<tns:taskList>
+				<tns1:Task Id="t1">
+					<tns1:Name>T1</tns1:Name>
+					<tns1:Description>T1 Desc</tns1:Description>
+					<tns1:Metric>
+						<tns1:Description>Metric desc</tns1:Description>
+						<tns1:estimate>
+							<tns1:wlSup>3</tns1:wlSup>
+							<tns1:wlInf>8</tns1:wlInf>
+							<tns1:startDate>2001-01-01</tns1:startDate>
+							<tns1:endDate>2001-01-01</tns1:endDate>
+						</tns1:estimate>
+					</tns1:Metric>
+					<tns1:Status tns1:currentState="New" upDate="2001-01-01" />
+				</tns1:Task>
+				<tns1:Task Id="t2">
+					<tns1:Name>T2</tns1:Name>
+					<tns1:Description>T2 Desc</tns1:Description>
+					<tns1:Metric>
+						<tns1:Description>Metric desc</tns1:Description>
+						<tns1:estimate>
+							<tns1:wlSup>3</tns1:wlSup>
+							<tns1:wlInf>8</tns1:wlInf>
+							<tns1:startDate>2001-01-01</tns1:startDate>
+							<tns1:endDate>2001-01-01</tns1:endDate>
+						</tns1:estimate>
+					</tns1:Metric>
+					<tns1:Status tns1:currentState="New" upDate="2001-01-01" />
+				</tns1:Task>
+			</tns:taskList>
+		</tns:phase>
+		<tns:phase tns1:keyId="">
+			<tns:name>tns:name</tns:name>
+			<tns:startDate>2001-01-01</tns:startDate>
+			<tns:endDate>2001-01-01</tns:endDate>
+			<tns:taskList>
+				<tns1:Task Id="t1">
+					<tns1:Name>T1</tns1:Name>
+					<tns1:Description>T1 Desc</tns1:Description>
+					<tns1:Metric>
+						<tns1:Description>Metric desc</tns1:Description>
+						<tns1:estimate>
+							<tns1:wlSup>3</tns1:wlSup>
+							<tns1:wlInf>8</tns1:wlInf>
+							<tns1:startDate>2001-01-01</tns1:startDate>
+							<tns1:endDate>2001-01-01</tns1:endDate>
+						</tns1:estimate>
+					</tns1:Metric>
+					<tns1:Status tns1:currentState="New" upDate="2001-01-01" />
+				</tns1:Task>
+				<tns1:Task Id="t2">
+					<tns1:Name>T2</tns1:Name>
+					<tns1:Description>T2 Desc</tns1:Description>
+					<tns1:Metric>
+						<tns1:Description>Metric desc</tns1:Description>
+						<tns1:estimate>
+							<tns1:wlSup>3</tns1:wlSup>
+							<tns1:wlInf>8</tns1:wlInf>
+							<tns1:startDate>2001-01-01</tns1:startDate>
+							<tns1:endDate>2001-01-01</tns1:endDate>
+						</tns1:estimate>
+					</tns1:Metric>
+					<tns1:Status tns1:currentState="New" upDate="2001-01-01" />
+				</tns1:Task>
+			</tns:taskList>
+		</tns:phase>
+	</tns:Phases>
+</tns:Project>

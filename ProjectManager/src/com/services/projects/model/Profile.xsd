@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.example.org/Profile"
+	xmlns:tns="http://www.example.org/Profile"
+	elementFormDefault="qualified" xmlns:pref="http://www.example.org/PMOTask">
+
+	<import schemaLocation="PMOTask.xsd" namespace="http://www.example.org/PMOTask"></import>
+	<complexType name="profile">
+		<sequence>
+			<element name="Resources" type="tns:resource" maxOccurs="1"
+				minOccurs="1">
+			</element>
+			<element name="Description" type="string"></element>
+		</sequence>
+		<attribute name="KeyId" type="string"></attribute>
+		<attribute name="Name" type="string"></attribute>
+	</complexType>
+
+
+
+
+    <complexType name="URI">
+    	<sequence>
+    		<element name="Credentials" type="tns:credentials"
+    			maxOccurs="4" minOccurs="1">
+    		</element>
+    		<element name="Path" type="string" maxOccurs="1"
+    			minOccurs="1">
+    		</element>
+    		<element name="Description" type="string"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="Profile" type="tns:profile"></element>
+
+    <simpleType name="right">
+    	<restriction base="string">
+    		<enumeration value="CREATE"></enumeration>
+    		<enumeration value="READ"></enumeration>
+    		<enumeration value="UPDATE"></enumeration>
+    		<enumeration value="DELETE"></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <complexType name="credentials">
+    	<sequence>
+    		<element name="rights" type="tns:right" maxOccurs="4" minOccurs="1"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="resource">
+    	<sequence>
+    		<element name="resource" type="tns:URI" maxOccurs="unbounded" minOccurs="1"></element>
+    	</sequence>
+    </complexType>
+</schema>
