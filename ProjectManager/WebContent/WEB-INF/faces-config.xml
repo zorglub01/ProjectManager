@@ -30,6 +30,17 @@
 		<managed-bean-class>com.lang.util.LangueApp</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>		
 	</managed-bean>
+	<managed-bean>
+		<description>Profile manager</description>
+		<managed-bean-name>profileBean</managed-bean-name>
+		<managed-bean-class>com.services.ProfileBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>uploadFileBean</managed-bean-name>
+		<managed-bean-class>com.services.UploadFileBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
 	
 
 	<application>

@@ -4,6 +4,7 @@
 package com.services.projects.utils;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -29,6 +30,16 @@ public class ModelManagerHelper{
 		jaxbMarshaller.marshal(t,System.out);
 	}
 	
+	public static <T> T loadModel(InputStream _xmlFile, Class<T> clazz) throws JAXBException{
+		JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
+		Unmarshaller jaxbUnMarshaller = jaxbContext.createUnmarshaller();
+		
+		@SuppressWarnings("unchecked")
+		T _res = (T)jaxbUnMarshaller.unmarshal(_xmlFile);
+		return _res ;
+		
+	}
+	
 	
 	public static <T> T loadModel(File _xmlFile, Class<T> clazz) throws JAXBException{
 		JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
@@ -48,25 +59,6 @@ public class ModelManagerHelper{
 		URL taskXmlUrl = ClassLoader.getSystemResource("com/services/projects/model/PMOTask.xml");
 		URL profileXmlUrl = ClassLoader.getSystemResource("com/services/projects/model/Profile.xml");
 		URL pmoXmlUrl = ClassLoader.getSystemResource("com/services/projects/model/PMOProject1.xml");
-		try {
-			File _testFile = new File(taskXmlUrl.toURI());									
-			Task _res = ModelManagerHelper.<Task>loadModel(_testFile, Task.class);
-			System.out.println(_res);			
-			ModelManagerHelper.<Task>saveModel(_res);
-			
-			File _testFile1 = new File(profileXmlUrl.toURI());									
-			Profile _res1 = ModelManagerHelper.<Profile>loadModel(_testFile1, Profile.class);
-			System.out.println(_res1);			
-			ModelManagerHelper.<Profile>saveModel(_res1);
-			
-			
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		try {
 			File _testFile2 = new File(pmoXmlUrl.toURI());									
@@ -81,10 +73,35 @@ public class ModelManagerHelper{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		
+		try {
+			File _testFile = new File(taskXmlUrl.toURI());									
+			Task _res = ModelManagerHelper.<Task>loadModel(_testFile, Task.class);
+			System.out.println(_res);			
+			ModelManagerHelper.<Task>saveModel(_res);
+			
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		
+		try {
+			
+			File _testFile1 = new File(profileXmlUrl.toURI());									
+			Profile _res1 = ModelManagerHelper.<Profile>loadModel(_testFile1, Profile.class);
+			System.out.println(_res1);			
+			ModelManagerHelper.<Profile>saveModel(_res1);
+			
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 		

@@ -20,7 +20,7 @@
 	</element>
 
 
-	<complexType name="URI">
+	<complexType name="profileURI">
 		<choice>
 			<sequence>
 				<element name="Credentials" type="tns:credentials"
@@ -52,7 +52,7 @@
 
     <complexType name="resource">
     	<sequence>
-    		<element name="resource" type="tns:URI" maxOccurs="unbounded" minOccurs="1"></element>
+    		<element name="resource" type="tns:profileURI" maxOccurs="unbounded" minOccurs="1"></element>
     	</sequence>
     </complexType>
 </schema>

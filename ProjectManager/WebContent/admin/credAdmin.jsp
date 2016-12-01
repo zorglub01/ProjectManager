@@ -4,6 +4,8 @@
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<f:view>
+<f:loadBundle basename="com.lang.util.msg" var="msg" />
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,24 +18,40 @@
   <style>
   .ui-menu { width: 200px; }
   .ui-widget-header { padding: 0.2em; }
+  body {min-height:100%;margin:0;} 
   </style>
 </head>
 <body>
-<div class="content-right twelve columns">
-	<div id="content" style="float:right;"></div>
-	<div id=sidebar" class="ui-widget-area"> 
+
+<table style="width: 100%">
+<thead>
+	<tr>
+		<th style="width: 15%" ></th>
+		<th style="width: 85%" ></th>
+	</tr>		
+</thead>
+<tbody>
+	<tr>
+		<td>
+		<div id=sidebar" class="ui-widget-area"> 
 	<ul id="menu" >
-  		<li class="ui-widget-header"><div>Users Credentials</div></li>
-  		<li><a href="#tabs-3" data-url="admin/credAdmin.faces" class="tabs">Profiles</a></li>
-  		<li><a href="#tabs-4" data-url="test_html/content1.html" class="tabs">Groups</a></li>
-  		<li><a href="#tabs-5" data-url="content1.html" class="tabs">User</a></li>
-  		<li class="ui-widget-header"><div>Projects Settings</div></li>
-  		<li><div>Project</div></li>
-  		<li><div>Calendar</div></li>
-  		<li><div>workload</div></li>
+  		<li class="ui-widget-header"><div><h:outputText value="#{msg.admin_user_credentials}"/>	</div></li>
+  		<li><a href="#tabs-3" data-url="admin/profileview.faces" class="tabs"><h:outputText value="#{msg.admin_entry_profile}"/></a></li>
+  		<li><a href="#tabs-4" data-url="admin/groupsview.faces" class="tabs"><h:outputText value="#{msg.admin_entry_group}"/></a></li>
+  		<li><a href="#tabs-5" data-url="admin/userview.faces" class="tabs"><h:outputText value="#{msg.admin_entry_user}"/></a></li>
+  		<li class="ui-widget-header"><div><h:outputText value="#{msg.admin_project_credentials}"/></div></li>
+  		<li><div><h:outputText value="#{msg.admin_entry_project}"/></div></li>
+  		<li><div><h:outputText value="#{msg.admin_entry_calendar}"/></div></li>
+  		<li><div><h:outputText value="#{msg.admin_entry_workload}"/></div></li>
 	</ul>
 	</div>
-</div>
+		</td>
+		<td><div id="content" ></div>
+		</td>
+	</tr>
+</tbody>
+</table>
+
 <script>
   $( function() {
     $( "#menu" ).menu({
@@ -49,6 +67,6 @@
     
   } );
   </script> 
- 
+</f:view> 
 </body>
 </html>

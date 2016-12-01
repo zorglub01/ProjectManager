@@ -3,15 +3,29 @@
  */
 package com.services.credentials.profiles;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import javax.xml.bind.JAXBException;
+
+import org.jboss.mx.loading.ClassLoaderUtils;
+
 import com.services.credentials.ResourceEntry;
+import com.services.projects.model.Profile;
+import com.services.projects.model.ProfileURI;
+import com.services.projects.utils.ModelManagerHelper;
 
 /**
  * @author thomas.foret
  *
  */
-public abstract class UserProfile {
+public class UserProfile {
 	
 	private String profileName;
 	private String profileDesc;
@@ -56,12 +70,34 @@ public abstract class UserProfile {
 	}
 	
 	
-	public static UserProfile getAdminProfile(){
-		return new AdminProfile();
+	public static UserProfile getAdminProfile() throws JAXBException{		
+		FacesContext fCtx = FacesContext.getCurrentInstance();
+		InputStream fileXmlUrl = fCtx.getExternalContext().getResourceAsStream("/WEB-INF/classes/com/services/credentials/profiles/profile_Admin.xml");										
+		Profile _res1 = ModelManagerHelper.<Profile>loadModel(fileXmlUrl, Profile.class);
+		UserProfile myProfile = getUserProfile(_res1);
+		return myProfile;
 	}
 	
-	public static UserProfile getDefaultProfile(){
-		return new DefaultProfile();
+	
+	private static UserProfile getUserProfile(Profile _xmlprofile){
+		UserProfile myProfile = new UserProfile();
+		myProfile.setProfileName(_xmlprofile.getName());
+		myProfile.setProfileDesc(_xmlprofile.getDescription());
+		myProfile.setResources(null);
+		for (ProfileURI myResource : _xmlprofile.getResources().getResource()) {
+			ResourceEntry rEntry = new ResourceEntry(myResource.getPath(), myResource.getDescription());
+			myProfile.getResources().add(rEntry);
+			
+		}
+		return myProfile;
+	}
+	
+	public static UserProfile getDefaultProfile() throws JAXBException{
+		FacesContext fCtx = FacesContext.getCurrentInstance();
+		InputStream fileXmlUrl = fCtx.getExternalContext().getResourceAsStream("/WEB-INF/classes/com/services/credentials/profiles/profile_Default.xml");										
+		Profile _res1 = ModelManagerHelper.<Profile>loadModel(fileXmlUrl, Profile.class);
+		UserProfile myProfile = getUserProfile(_res1);		
+		return myProfile;
 	}
 	
 	
