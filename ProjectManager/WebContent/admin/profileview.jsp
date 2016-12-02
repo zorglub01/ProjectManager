@@ -35,7 +35,7 @@
 						<div id="profileMenu">
 							<ul>
 								<li><a href="#profileView">Profile List</a></li>
-								<li><a href="#profileCreate">Profile List</a></li>
+								<li><a href="#profileCreate">Profile create</a></li>
 
 								<li><a href="#profileHelp">Profile Help</a></li>
 							</ul>
@@ -48,6 +48,7 @@
 
 							<div id="profileHelp">
 								<p>Manage profiles</p>
+								<iframe src=""></iframe>
 							</div>
 						</div>
 
@@ -79,7 +80,7 @@
         $('#profileContents').jtable({
             title: 'Table of people',
             actions: {
-                listAction: '/ProjectManager/admin/profileload.faces',
+                listAction: 'JsonDataLoader',
                 createAction: '/GettingStarted/CreatePerson',
                 updateAction: '/GettingStarted/UpdatePerson',
                 deleteAction: '/GettingStarted/DeletePerson'
@@ -106,6 +107,7 @@
                 }
             }
         });
+        $('#profileContents').jtable('load');
     });
 </script>
 

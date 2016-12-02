@@ -18,32 +18,39 @@
     <servlet-name>Faces Servlet</servlet-name>
     <url-pattern>*.faces</url-pattern>
   </servlet-mapping>
-  
   <filter>
-        <filter-name>MyFacesExtensionsFilter</filter-name>
-        <filter-class>
+    <filter-name>MyFacesExtensionsFilter</filter-name>
+    <filter-class>
             org.apache.myfaces.webapp.filter.ExtensionsFilter
         </filter-class>
-        <init-param>
-    <description>
+    <init-param>
+      <description>
       Set the size limit for uploaded files. 
       Format: 10 - 10  bytes 
       10k - 10 KB 
       10m - 10 MB 
       1g - 1 GB
     </description>
-    <param-name>maxFileSize</param-name>
-    <param-value>20m</param-value>
-  </init-param>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>MyFacesExtensionsFilter</filter-name>
-        <servlet-name>Faces Servlet</servlet-name>
-   </filter-mapping>
+      <param-name>maxFileSize</param-name>
+      <param-value>20m</param-value>
+    </init-param>
+  </filter>
   <filter-mapping>
-  	<filter-name>MyFacesExtensionsFilter</filter-name>
-  	<url-pattern>*.faces</url-pattern>
-   </filter-mapping>
-  
+    <filter-name>MyFacesExtensionsFilter</filter-name>
+    <servlet-name>Faces Servlet</servlet-name>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>MyFacesExtensionsFilter</filter-name>
+    <url-pattern>*.faces</url-pattern>
+  </filter-mapping>
+  <servlet>
+    <description></description>
+    <display-name>JsonDataLoader</display-name>
+    <servlet-name>JsonDataLoader</servlet-name>
+    <servlet-class>com.services.JsonDataLoader</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JsonDataLoader</servlet-name>
+    <url-pattern>/JsonDataLoader</url-pattern>
+  </servlet-mapping>
 </web-app>
