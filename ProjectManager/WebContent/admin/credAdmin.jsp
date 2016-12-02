@@ -60,7 +60,7 @@
     
     $('.tabs').click(function(){
     	var $this = $(this);
-    	alert($this.attr('href') +" / " + $this.attr('data-url') + "/" + $this.data('url'));
+    	//alert($this.attr('href') +" / " + $this.attr('data-url') + "/" + $this.data('url'));
     	$('#content').load($this.data('url'));
     });
     

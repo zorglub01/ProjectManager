@@ -43,7 +43,7 @@
 							</div>
 							<div id="profileCreate">
 								<p>Creation de profile</p>
-								<iframe src="/admin/uploadpage.faces"></iframe>
+								<iframe src="admin/uploadpage.faces"></iframe>
 							</div>
 
 							<div id="profileHelp">
@@ -87,12 +87,13 @@
             },
             fields: {
                 PersonId: {
-                    key: true,
-                    list: false
+                    title: 'Id',
+                	key: true,
+                    list: true
                 },
                 Name: {
                     title: 'Author Name',
-                    width: '40%'
+                    width: '30%'
                 },
                 Age: {
                     title: 'Age',
