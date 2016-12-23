@@ -86,7 +86,7 @@ public class DAOProfile {
 				System.out.println(file.getPath());
 				String _name  = FilenameUtils.getBaseName(file.getName());
 				String _ext  = FilenameUtils.getExtension(file.getName());
-				if(_ext.equalsIgnoreCase("xml") && _name.startsWith("profile_")){
+				if(_ext.equalsIgnoreCase("xml") && _name.startsWith(HTTP_UPLOAD_PARAM_VAL+"_")){
 					String[] _tmp = _name.split("_"); 
 					repository.put(_tmp[1], Paths.get(file.toURI()));
 				}
@@ -97,6 +97,11 @@ public class DAOProfile {
 		return 	instance;		
 	}
 	
+	/**
+	 * Scan the DB directory and send back the result as a Json string.
+	 * @return Json string 
+	 * @throws JsonProcessingException
+	 */
 	public String scanDbFile() throws JsonProcessingException{
 		Path folder = Paths.get(urlDbPath);
 		String _res = ModelManagerHelper.getFileScanAsJson(folder);

@@ -4,6 +4,7 @@
 package com.services.projects.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -11,6 +12,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -20,12 +23,17 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.codehaus.jackson.map.type.CollectionType;
 
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.services.JsonJtableWrapper;
+import com.services.projects.bean.JsonProjectWrapper;
 import com.services.projects.model.Profile;
 import com.services.projects.model.Project;
 import com.services.projects.model.Task;
@@ -50,11 +58,31 @@ public class ModelManagerHelper{
 		return jsonInString ;		
 	}
 	
+	public static <T> T getObjectFromJson(String jsonInString,Class<T> clazz) throws JsonParseException, JsonMappingException, IOException{
+		ObjectMapper mymapper = new ObjectMapper();
+		mymapper.setVisibility(PropertyAccessor.GETTER, Visibility.PROTECTED_AND_PUBLIC);
+		
+		@SuppressWarnings("unchecked")
+		T _res = (T)mymapper.readValue(jsonInString, clazz);
+		return _res;
+	}
+	
+	
+	public static <T> List<T> getObjectListFromJson(String jsonInString,Class<T> clazz) throws JsonParseException, JsonMappingException, IOException{
+		ObjectMapper mymapper = new ObjectMapper();
+		mymapper.setVisibility(PropertyAccessor.GETTER, Visibility.PROTECTED_AND_PUBLIC);
+		mymapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		com.fasterxml.jackson.databind.type.CollectionType _colType = mymapper.getTypeFactory().constructCollectionType(List.class, clazz);
+		List<T> _res = mymapper.readValue(jsonInString, _colType);
+		return _res;
+	}
+	
 	
 	public static String getJsonStream(Object _object) throws JsonProcessingException{
 
 		ObjectMapper mymapper = new ObjectMapper();
 		mymapper.setVisibility(PropertyAccessor.GETTER, Visibility.PROTECTED_AND_PUBLIC);
+		mymapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		String jsonInString = mymapper.writeValueAsString(_object);
 		System.out.println(jsonInString);
 		return jsonInString ;
@@ -118,6 +146,32 @@ public class ModelManagerHelper{
 		testProfile(profileXmlUrl);
 		
 		testFileScan();
+		
+		testJsonMessage();
+	}
+	
+	private static void testJsonMessage(){
+		System.out.println("TESTING JSON ARRAY to OBJECT");
+		
+		URL resource = ClassLoader.getSystemResource("com/lang/util/msg.properties");
+		Properties _prop  = new Properties();
+		
+		try {
+			_prop.load(resource.openStream());
+			List<JsonProjectWrapper> _res = getObjectListFromJson(_prop.getProperty("project_list"),JsonProjectWrapper.class);
+			for (JsonProjectWrapper jsonProjectWrapper : _res) {
+				System.out.println(jsonProjectWrapper.getName());
+			}
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
