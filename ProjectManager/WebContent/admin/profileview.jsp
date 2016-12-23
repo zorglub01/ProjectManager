@@ -3,6 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core"%>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 
 
@@ -23,91 +24,92 @@
 	
 	</head>
 
-	<header></header>
-	<body>
-		<table style="width: 100%">
-			<thead>
-				<tr>
-					<th>Profile manager view</th>
-				</tr>
-				<tr>
-					<td>
-						<div id="profileMenu">
-							<ul>
-								<li><a href="#profileView">Profile List</a></li>
-								<li><a href="#profileCreate">Profile create</a></li>
-
-								<li><a href="#profileHelp">Profile Help</a></li>
-							</ul>
-							<div id="profileView"><div id="profileContents"></div>
-							</div>
-							<div id="profileCreate">
-								<p>Creation de profile</p>
-								<iframe src="admin/uploadpage.faces"></iframe>
-							</div>
-
-							<div id="profileHelp">
-								<p>Manage profiles</p>
-								<iframe src=""></iframe>
-							</div>
-						</div>
-
-					</td>
-				</tr>
-			</thead>
-
-		</table>
-		<h:inputText id="propertyId" value="#{msg.test_listaction}" />
-	</body>
-	<footer></footer>
-	<script>
-		$(document).ready(function() {
-			$("#profileMenu").tabs({
-				beforeLoad : function(event, ui) {
-					ui.jqXHR.fail(function() {
-						ui.panel.html("Couldn't load this tab. We'll try to fix this as soon as possible. "
-										+ "If this wouldn't be a demo.");
-									});
-							}
-						});
-			
-			
-		});
-	</script>
 	
+	<body>
+	<div id="profileContents"></div>
+		
+	</body>
+		
 	<script type="text/javascript">
     $(document).ready(function () {
+    	
         $('#profileContents').jtable({
             title: 'Table of people',
             actions: {
-                listAction: 'JsonDataLoader',
-                createAction: '/GettingStarted/CreatePerson',
-                updateAction: '/GettingStarted/UpdatePerson',
-                deleteAction: '/GettingStarted/DeletePerson'
+                listAction: '/ProjectManager/ProfileManager?action=read',
+                createAction: '/ProjectManager/ProfileManager?action=create',
+                updateAction: '/ProjectManager/ProfileManager?action=update',
+                deleteAction: '/ProjectManager/ProfileManager?action=delete'
             },
             fields: {
-                PersonId: {
+                keyId: {
                     title: 'Id',
                 	key: true,
                     list: true
                 },
-                Name: {
-                    title: 'Author Name',
-                    width: '30%'
+                name: {
+                    title: 'Profile Name',
+                    width: '10%'
                 },
-                Age: {
-                    title: 'Age',
-                    width: '20%'
-                },
-                RecordDate: {
-                    title: 'Record date',
-                    width: '30%',
-                    type: 'date',
+                
+                resources: {
+                    title: '',
+                    width: '5%',
+                    sorting: false,
+                    edit: false,
                     create: false,
-                    edit: false
+                    display : function (cData){
+                    	var $img = $('<img src="img/action_2downarrow.png" title="Resources details" />');
+                    	$img.click( function() {
+                    		alert("hello1" + cData.record.name);
+                    		$('#profileContents').jtable('openChildTable',
+                    				$img.closest('tr'),
+                    				{
+                    					title: cData.record.name + ' credentials',
+                    					actions:{
+                    						listAction: '/ProjectManager/ResourcesManager?action=read&id=' + cData.record.name,
+                    						createAction: '/ProjectManager/ResourcesManager?action=create&id=' + cData.record.name,
+                    						updateAction: '/ProjectManager/ResourcesManager?action=update&id=' + cData.record.name,
+                    						deleteAction: '/ProjectManager/ResourcesManager?action=delete&id=' + cData.record.name
+                    					},
+                    					fields: {
+                    						path:{
+                    							title: 'Resource path',
+                    							width:'50%',
+                    		                	key: true,
+                    		                    list: true,
+                    		                    create:true
+                    						},
+                    						description: {
+                    							title: 'Description',
+                    		                    width: '30%'
+                    						},
+                    						credentials: {
+                    							title: 'Credentials',
+                    		                    width: '20%',
+                    		                    display : function(crData){
+                    		                    	var $tmpVal = crData.record.credentials;
+                    		                    	return "CRUD:" + $tmpVal.rights.toString();
+                    		                    }
+                    						}
+                    					}
+                    				},
+                    				function (data){                    					
+                    					data.childTable.jtable('load');
+                    				}
+                    		);
+                    		
+                    	});
+                    	return $img;
+                    }                  
+                },
+                description: {
+                    title: 'Description',
+                    width: '20%'
                 }
             }
         });
+        
         $('#profileContents').jtable('load');
     });
 </script>

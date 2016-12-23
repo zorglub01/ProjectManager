@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tns:Profile KeyId="" Name="" xmlns:tns="http://www.example.org/Profile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.example.org/Profile ../../projects/model/Profile.xsd ">
+<tns:Profile KeyId="1" Name="Admin" xmlns:tns="http://www.example.org/Profile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.example.org/Profile ../../projects/model/Profile.xsd ">
 	<tns:Resources>
     <tns:resource>
       <tns:Credentials>
@@ -8,7 +8,7 @@
         <tns:rights>UPDATE</tns:rights>
         <tns:rights>DELETE</tns:rights>
       </tns:Credentials>      
-      <tns:Path>admin/credAdmin.faces</tns:Path>
+      <tns:Path>/ProjectManager/admin/credAdmin.faces</tns:Path>
       <tns:Description>Admin page</tns:Description>
     </tns:resource>
     <tns:resource>
@@ -18,7 +18,7 @@
         <tns:rights>UPDATE</tns:rights>
         <tns:rights>DELETE</tns:rights>
       </tns:Credentials>      
-      <tns:Path>credPM.faces</tns:Path>
+      <tns:Path>/ProjectManager/project/projAdmin.faces</tns:Path>
       <tns:Description>Project page</tns:Description>
     </tns:resource>
   </tns:Resources>

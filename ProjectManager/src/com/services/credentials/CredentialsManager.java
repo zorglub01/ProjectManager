@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBException;
 
 import com.jmd.test.jsf.LoginBean;
-
 import com.services.credentials.profiles.UserProfile;
 
 /**
@@ -65,6 +64,8 @@ public class CredentialsManager {
 		}else{
 			UserProfile profile1 = UserProfile.getDefaultProfile();
 			_res.add(profile1);
+			
+			
 		}
 		
 		return _res;

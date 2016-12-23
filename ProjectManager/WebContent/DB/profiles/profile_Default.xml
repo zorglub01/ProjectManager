@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tns:Profile KeyId="" Name="" xmlns:tns="http://www.example.org/Profile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.example.org/Profile ../../projects/model/Profile.xsd ">
+<tns:Profile KeyId="2" Name="Default" xmlns:tns="http://www.example.org/Profile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.example.org/Profile ../../projects/model/Profile.xsd ">
 	<tns:Resources>
     <tns:resource>
       <tns:Credentials>

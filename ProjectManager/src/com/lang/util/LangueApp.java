@@ -16,6 +16,7 @@ public class LangueApp {
 	  public String activerFR() {
 		    FacesContext context = FacesContext.getCurrentInstance();
 		    context.getViewRoot().setLocale(Locale.FRENCH);
+		    
 		    return null;
 		  }
 
