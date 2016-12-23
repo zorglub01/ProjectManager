@@ -3,10 +3,13 @@
  */
 package com.services.credentials;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.JAXBException;
 
 import com.jmd.test.jsf.LoginBean;
 
@@ -18,7 +21,7 @@ import com.services.credentials.profiles.UserProfile;
  */
 public class CredentialsManager {
 	
-	public static ArrayList<SelectItem> getMenuEntry(HttpSession session, LoginBean user){
+	public static ArrayList<SelectItem> getMenuEntry(HttpSession session, LoginBean user) throws URISyntaxException, JAXBException, MalformedURLException{
 		System.out.println(user.getNom() +"/" + user.getMdp() + "/" + session.getId() );
 		AppUser currentUser = new AppUser(session.getId(), user.getNom(),user.getMdp());
 		ArrayList<UserGroup> currentGroups = loadUserGroups(currentUser);
@@ -48,8 +51,11 @@ public class CredentialsManager {
 	 * It's used to build the menu based on the credentials
 	 * @param currentUser
 	 * @return
+	 * @throws JAXBException 
+	 * @throws URISyntaxException 
+	 * @throws MalformedURLException 
 	 */
-	private static ArrayList<UserProfile> loadUserProfile(AppUser currentUser) {
+	private static ArrayList<UserProfile> loadUserProfile(AppUser currentUser) throws URISyntaxException, JAXBException, MalformedURLException {
 		// TODO Find out from the DB the profiles of the current user
 		//
 		ArrayList<UserProfile> _res = new ArrayList<UserProfile>();

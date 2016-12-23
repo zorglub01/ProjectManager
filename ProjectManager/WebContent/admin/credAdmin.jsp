@@ -4,51 +4,82 @@
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<f:view>
+<f:loadBundle basename="com.lang.util.msg" var="msg" />
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>jQuery UI Menu - Categories</title>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  
-  <style>
-  .ui-menu { width: 200px; }
-  .ui-widget-header { padding: 0.2em; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Global Admin Setup</title>
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.structure.min.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.theme.min.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery.appendGrid-1.6.2.css" />
+
+<script type="text/javascript"	src="/ProjectManager/jquery-1.11.1.min.js"></script>
+<script type="text/javascript"	src="/ProjectManager/jquery-ui-1.11.1.min.js"></script>
+<script type="text/javascript"	src="/ProjectManager/jquery.appendGrid-1.6.2.js"></script>
+
+<script>
+jQuery(document).ready(function () {
+    $("#credAdminMenu").accordion();
+    $("#credAdminFrame").attr("src", "/ProjectManager/admin/profileview.faces");
+});
+  </script> 
 </head>
 <body>
-<div class="content-right twelve columns">
-	<div id="content" style="float:right;"></div>
-	<div id=sidebar" class="ui-widget-area"> 
-	<ul id="menu" >
-  		<li class="ui-widget-header"><div>Users Credentials</div></li>
-  		<li><a href="#tabs-3" data-url="admin/credAdmin.faces" class="tabs">Profiles</a></li>
-  		<li><a href="#tabs-4" data-url="test_html/content1.html" class="tabs">Groups</a></li>
-  		<li><a href="#tabs-5" data-url="content1.html" class="tabs">User</a></li>
-  		<li class="ui-widget-header"><div>Projects Settings</div></li>
-  		<li><div>Project</div></li>
-  		<li><div>Calendar</div></li>
-  		<li><div>workload</div></li>
-	</ul>
+
+<form id="credAdminForm"action="">
+	<div id="wrap">
+	<table cellspacing="10" cellpadding="10">
+	<tr>
+		<td width="200px" style="vertical-align: top">
+			<div id="credAdminMenu" style="font-size: 75%; height: 600px; width: 240px;">
+				<h3>Profile and Credentials</h3>
+				<div>
+					<ul>
+						<li>
+							<a href="/ProjectManager/admin/profileview.faces" target="credAdminFrame">Profile setup</a>
+						</li>
+						<li>
+							<a href="/ProjectManager/admin/uploadpage.faces?scope=profile" target="credAdminFrame">Import-Export</a>
+						</li>
+					</ul>
+				</div>
+				<h3>User</h3>
+				<div>
+					<ul>
+						<li>
+							<a href="/ProjectManager/admin/profileview.faces" target="credAdminFrame">Profile setup</a>
+						</li>
+						<li>
+							<a href="/ProjectManager/admin/uploadpage.faces?scope=profile" target="credAdminFrame">Import-Export</a>
+						</li>
+					</ul>
+				</div>
+				<h3> Sample</h3>
+				<div>
+					<ul>
+						<li>
+							<a href="/ProjectManager/SubGrid-sample/sample.html" target="credAdminFrame">Sub Grid</a>
+						</li>
+						<li>
+							<a href="/ProjectManager/sample1/sample.html" target="credAdminFrame">Sample1</a>
+						</li>
+						<li>
+							<a href="/ProjectManager/sample2/sample.html" target="credAdminFrame">Sample1</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</td>
+		<td width="1200px" valign="top">
+        	<iframe id="credAdminFrame" name="credAdminFrame"  style="width: 1200px; height: 2000px; border-width: 0;"></iframe>
+        </td>
+	</tr>
+	</table>
+	
 	</div>
-</div>
-<script>
-  $( function() {
-    $( "#menu" ).menu({
-      items: "> :not(.ui-widget-header)"
-    });
-    
-    $('.tabs').click(function(){
-    	var $this = $(this);
-    	alert($this.attr('href') +" / " + $this.attr('data-url') + "/" + $this.data('url'));
-    	$('#content').load($this.data('url'));
-    });
-    
-    
-  } );
-  </script> 
- 
+</form>
+
+</f:view> 
 </body>
 </html>
