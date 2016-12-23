@@ -53,4 +53,28 @@
     <servlet-name>JsonDataLoader</servlet-name>
     <url-pattern>/JsonDataLoader</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ProfileManager</display-name>
+    <servlet-name>ProfileManager</servlet-name>
+    <servlet-class>com.services.ProfileManager</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProfileManager</servlet-name>
+    <url-pattern>/ProfileManager</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ResourcesManager</display-name>
+    <servlet-name>ResourcesManager</servlet-name>
+    <servlet-class>com.services.ResourcesManager</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResourcesManager</servlet-name>
+    <url-pattern>/ResourcesManager</url-pattern>
+  </servlet-mapping>
+  <mime-mapping>
+  	<extension>xml</extension>
+  	<mime-type>application/octet-stream</mime-type>
+  </mime-mapping>
 </web-app>
