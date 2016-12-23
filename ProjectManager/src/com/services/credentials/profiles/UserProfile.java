@@ -3,18 +3,17 @@
  */
 package com.services.credentials.profiles;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeMap;
 
 import javax.faces.context.FacesContext;
+import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.xml.bind.JAXBException;
-
-import org.jboss.mx.loading.ClassLoaderUtils;
 
 import com.services.credentials.ResourceEntry;
 import com.services.projects.model.Profile;
@@ -27,78 +26,117 @@ import com.services.projects.utils.ModelManagerHelper;
  */
 public class UserProfile {
 	
-	private String profileName;
-	private String profileDesc;
-	private ArrayList<ResourceEntry> resources;
+	public static final String HTTP_PARAM_ResourcePath="path";
+	
+	private Profile profile;
+	private TreeMap<String,ProfileURI> uriResourceMap=new TreeMap<String,ProfileURI>();
+	/**
+	 * @return the profile
+	 */
+	public Profile getProfile() {
+		return this.profile;
+	}
+	/**
+	 * @param profile the profile to set
+	 */
+	public void setProfile(Profile profile) {
+		this.profile = profile;
+		for (ProfileURI myResource : this.getProfile().getResources().getResource()) {
+			this.registerResource(myResource);			
+		}
+		
+	}
 	/**
 	 * @return the resources
 	 */
 	public ArrayList<ResourceEntry> getResources() {
-		if (this.resources == null) this.resources = new ArrayList<ResourceEntry>();
-		return this.resources;
-	}
-	/**
-	 * @param resources the resources to set
-	 */
-	void setResources(ArrayList<ResourceEntry> resources) {
-		this.resources = resources;
+		ArrayList<ResourceEntry> _res = new ArrayList<ResourceEntry>();
+		for (ProfileURI myResource : this.getProfile().getResources().getResource()) {
+			ResourceEntry rEntry = new ResourceEntry(myResource.getPath(), myResource.getDescription());
+			_res.add(rEntry);
+			this.registerResource(myResource);			
+		}
+		return _res;
 	}
 	
-	/**
-	 * @param profileName the profileName to set
-	 */
-	protected void setProfileName(String profileName) {
-		this.profileName = profileName;
+	protected boolean isResourceExist(String _path){
+		boolean _res=false;
+		ProfileURI _tmp = this.uriResourceMap.get(_path);
+		if(_tmp !=null) _res=true;
+		return _res;
 	}
+	
+	
+	
+	protected void registerResource(ProfileURI _pUri){
+		this.uriResourceMap.put(_pUri.getPath(), _pUri);
+	}
+	
+	protected ProfileURI unRegisterResource(ProfileURI _pUri){
+		return this.uriResourceMap.remove(_pUri.getPath());
+	}
+	
+	
 	/**
 	 * @return the profileName
 	 */
 	String getProfileName() {
-		return this.profileName;
+		return this.getProfile().getName();
 	}
 	/**
 	 * @return the profileDesc
 	 */
 	String getProfileDesc() {
-		return this.profileDesc;
-	}
-	/**
-	 * @param profileDesc the profileDesc to set
-	 */
-	protected void setProfileDesc(String profileDesc) {
-		this.profileDesc = profileDesc;
+		return this.getProfile().getDescription();
 	}
 	
 	
-	public static UserProfile getAdminProfile() throws JAXBException{		
-		FacesContext fCtx = FacesContext.getCurrentInstance();
-		InputStream fileXmlUrl = fCtx.getExternalContext().getResourceAsStream("/WEB-INF/classes/com/services/credentials/profiles/profile_Admin.xml");										
-		Profile _res1 = ModelManagerHelper.<Profile>loadModel(fileXmlUrl, Profile.class);
-		UserProfile myProfile = getUserProfile(_res1);
-		return myProfile;
+	public static UserProfile getAdminProfile() throws JAXBException{
+		UserProfile _res1 = getDAO().findProfileByName("Admin");
+		return _res1 ;
 	}
 	
 	
-	private static UserProfile getUserProfile(Profile _xmlprofile){
-		UserProfile myProfile = new UserProfile();
-		myProfile.setProfileName(_xmlprofile.getName());
-		myProfile.setProfileDesc(_xmlprofile.getDescription());
-		myProfile.setResources(null);
-		for (ProfileURI myResource : _xmlprofile.getResources().getResource()) {
-			ResourceEntry rEntry = new ResourceEntry(myResource.getPath(), myResource.getDescription());
-			myProfile.getResources().add(rEntry);
-			
+	private static DAOProfile getDAO(){
+		DAOProfile _res=DAOProfile.getInstance();
+		if(_res==null){
+			ServletContext cContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
+			String _rootPathApp = cContext.getRealPath("/");
+			_res = DAOProfile.getInstance(_rootPathApp);
+
 		}
-		return myProfile;
+		return _res;
 	}
+
 	
 	public static UserProfile getDefaultProfile() throws JAXBException{
-		FacesContext fCtx = FacesContext.getCurrentInstance();
-		InputStream fileXmlUrl = fCtx.getExternalContext().getResourceAsStream("/WEB-INF/classes/com/services/credentials/profiles/profile_Default.xml");										
-		Profile _res1 = ModelManagerHelper.<Profile>loadModel(fileXmlUrl, Profile.class);
-		UserProfile myProfile = getUserProfile(_res1);		
-		return myProfile;
+		UserProfile _res1 = getDAO().findProfileByName("Default");
+		return _res1 ;
 	}
+	public ProfileURI getResourceURI(String _path) {
+		
+		return this.uriResourceMap.get(_path);
+	}
+	public void addResource(ProfileURI _pUri) {
+		this.getProfile().getResources().getResource().add(_pUri);
+		this.registerResource(_pUri);
+		
+	}
+	public ProfileURI removeResources(ProfileURI _pUri) {
+		int index=0;
+		ProfileURI _res=null;
+		for (ProfileURI _prui : this.getProfile().getResources().getResource()){
+			if(_prui.getPath().equalsIgnoreCase(_pUri.getPath())){
+				this.getProfile().getResources().getResource().remove(index);
+				_res = this.unRegisterResource(_pUri);
+				break;
+			}
+			index++;
+		}
+		return _res;
+		
+	}
+	
 	
 	
 	

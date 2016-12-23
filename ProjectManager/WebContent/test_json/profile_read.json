@@ -1,0 +1,46 @@
+{
+	"Result": "OK",
+	"Records": [{
+			"resources": {
+				"resource": [{
+						"credentials": {
+							"rights": ["CREATE", "READ", "UPDATE", "DELETE"]
+						},
+						"path": "/ProjectManager/admin/credAdmin.faces",
+						"description": "Admin page"
+					}, {
+						"credentials": {
+							"rights": ["CREATE", "READ", "UPDATE", "DELETE"]
+						},
+						"path": "/ProjectManager/project/projAdmin.faces",
+						"description": "Project page"
+					}
+				]
+			},
+			"description": "Admin profile setup",
+			"keyId": "1",
+			"name": "Admin"
+		}, {
+			"resources": {
+				"resource": [{
+						"credentials": {
+							"rights": ["CREATE", "READ", "UPDATE", "DELETE"]
+						},
+						"path": "Default.jsp",
+						"description": "Anonymous View"
+					}, {
+						"credentials": {
+							"rights": ["CREATE", "READ", "UPDATE", "DELETE"]
+						},
+						"path": "help/help.jsp",
+						"description": "Help Page"
+					}
+				]
+			},
+			"description": "Anonymous setup",
+			"keyId": "2",
+			"name": "Default"
+		}
+	],
+	"record": null
+}

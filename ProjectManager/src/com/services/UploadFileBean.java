@@ -3,22 +3,23 @@
  */
 package com.services;
 
-
-
-
-import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 
-import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.myfaces.custom.fileupload.UploadedFile;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.services.credentials.profiles.DAOProfile;
 
 /**
  * @author thomas.foret
@@ -29,6 +30,51 @@ public class UploadFileBean {
 	private UploadedFile uploadedFile;
 	private boolean success;
 	private boolean failure;
+	private String scope;
+
+	/**
+	 * @return the dbContentOverview
+	 */
+	public String getFileScan() {
+		String _res = "Error";
+		String _scope = this.getScope();
+		if (DAOProfile.getHTTP_UPLOAD_PARAM_VAL().equalsIgnoreCase(_scope)) {
+			try {
+				_res = DAOProfile.getInstance().scanDbFile();
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return _res;
+	}
+
+	/**
+	 * @return the scope
+	 */
+	public String getScope() {
+		ExternalContext _ctx = FacesContext.getCurrentInstance().getExternalContext();
+		HttpSession _session = (HttpSession)_ctx.getSession(true);
+		String _scopeFromParam = _ctx.getRequestParameterMap().get("scope");
+		String _scopeFromSession = (String) _session.getAttribute("scope");
+		System.out.println("param from HTPP req:" + _scopeFromParam + " from session" + _scopeFromSession);
+		
+		if(_scopeFromParam != null ){
+			_session.setAttribute("scope",_scopeFromParam);
+		}
+		String _res = (String) _session.getAttribute("scope");
+		return _res;
+	}
+
+	/**
+	 * @param scope
+	 *            the scope to set
+	 */
+	public void setScope(String scope) {
+		HttpSession _session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		 _session.setAttribute("scope",scope);
+		this.scope = scope;
+	}
 
 	public String upload() {
 		String result = "";
@@ -36,22 +82,27 @@ public class UploadFileBean {
 			InputStream stream = uploadedFile.getInputStream();
 			long size = uploadedFile.getSize();
 			System.out.println("Size of the file is " + size);
-			
-			ServletContext cContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
-			String _rootPathApp = cContext.getRealPath("/");
-			System.out.println(_rootPathApp);
-			Path folder = Paths.get(_rootPathApp + "DB");
-			
 			String filename = FilenameUtils.getBaseName(uploadedFile.getName());
 			String extension = FilenameUtils.getExtension(uploadedFile.getName());
-			Path file = Files.createTempFile(folder, filename + "_", "."+extension);
-			Files.copy(stream, file, StandardCopyOption.REPLACE_EXISTING);
+			
+			String _scope = this.getScope();
+			if(DAOProfile.getHTTP_UPLOAD_PARAM_VAL().equals(_scope)){
+				DAOProfile.getInstance().importFile(stream,filename);
+			}else{
+				ServletContext cContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
+				
+				String rootCtxPath =  cContext.getRealPath("/");
+				Path _tmpFilePath = Paths.get(rootCtxPath + "/upload");
+				Path file = Files.createTempFile(_tmpFilePath, filename + "_", "." + extension);
+				Files.copy(stream, file, StandardCopyOption.REPLACE_EXISTING);
+			}
+			
 			success = true;
 			failure = false;
 			System.out.println("File Upload Successful.");
 			result = "ok";
 		} catch (Exception ioe) {
-			System.out.println("File Upload Unsuccessful." );
+			System.out.println("File Upload Unsuccessful.");
 			ioe.printStackTrace();
 			success = false;
 			failure = true;

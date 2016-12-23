@@ -24,7 +24,7 @@
 		<choice>
 			<sequence>
 				<element name="Credentials" type="tns:credentials"
-					maxOccurs="4" minOccurs="1">
+					maxOccurs="1" minOccurs="1">
 				</element>
 				<element name="Path" type="string" maxOccurs="1"
 					minOccurs="1">

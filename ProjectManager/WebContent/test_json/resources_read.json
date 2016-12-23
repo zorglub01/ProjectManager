@@ -1,0 +1,18 @@
+{
+	"Result": "OK",
+	"Records": [{
+			"credentials": {
+				"rights": ["CREATE", "READ", "UPDATE", "DELETE"]
+			},
+			"path": "/ProjectManager/admin/credAdmin.faces",
+			"description": "Admin page"
+		}, {
+			"credentials": {
+				"rights": ["CREATE", "READ", "UPDATE", "DELETE"]
+			},
+			"path": "/ProjectManager/project/projAdmin.faces",
+			"description": "Project page"
+		}
+	],
+	"Record": null
+}

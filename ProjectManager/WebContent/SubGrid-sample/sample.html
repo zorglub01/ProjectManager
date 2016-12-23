@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>appendGrid</title>
+<link rel="stylesheet" type="text/css" href="jquery-ui.structure.min.css"/>
+<link rel="stylesheet" type="text/css" href="jquery-ui.theme.min.css"/>
+<link rel="stylesheet" type="text/css" href="jquery-ui.theme.alternate.min.css"/>
+<link rel="stylesheet" type="text/css" href="jquery.appendGrid-1.6.2.css"/>
+
+<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="jquery-ui-1.11.1.min.js"></script>
+<script type="text/javascript" src="jquery.appendGrid-1.6.2.js"></script>
+
+  </head>
+  <body>
+  <script id="jsSource" type="text/javascript">
+$(function () {
+    // Initialize appendGrid
+    $('#tblAppendGrid').appendGrid({
+        caption: 'My CD Collections',
+        initRows: 1,
+        columns: [
+            { name: 'Album', display: 'Album', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '160px'} },
+            { name: 'Artist', display: 'Artist', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '100px'} },
+            { name: 'Year', display: 'Year', type: 'text', ctrlAttr: { maxlength: 4 }, ctrlCss: { width: '40px'} },
+            { name: 'Origin', display: 'Origin', type: 'select', ctrlOptions: { 0: '{Choose}', 1: 'Hong Kong', 2: 'Taiwan', 3: 'Japan', 4: 'Korea', 5: 'US', 6: 'Others'} },
+            { name: 'Price', display: 'Price', type: 'text', ctrlAttr: { maxlength: 10 }, ctrlCss: { width: '50px', 'text-align': 'right' }, value: 0 }
+        ],
+        initData: [
+            {
+                'Album': 'Dearest', 'Artist': 'Theresa Fu', 'Year': '2009', 'Origin': 1, 'Price': 168.9,
+                'SubGridData': [{ Souvenir: 'Poster', Quantity: 1}]
+            },
+            {
+                'Album': 'To be Free', 'Artist': 'Arashi', 'Year': '2010', 'Origin': 3, 'Price': 152.6,
+                'SubGridData': [
+                    { Souvenir: 'Sticker', Quantity: 5 },
+                    { Souvenir: 'Special DVD', Quantity: 1 }
+                ]
+            },
+            {
+                'Album': 'Count On Me', 'Artist': 'Show Luo', 'Year': '2012', 'Origin': 2, 'Price': 306.8,
+                'SubGridData': [
+                    { Souvenir: '20% off coupon', Quantity: 2 },
+                    { Souvenir: 'Postcard', Quantity: 3 }
+                ]
+            },
+            {
+                'Album': 'Wonder Party', 'Artist': 'Wonder Girls', 'Year': '2012', 'Origin': 4, 'Price': 108.6
+            },
+            {
+                'Album': 'Reflection', 'Artist': 'Kelly Chen', 'Year': '2013', 'Origin': 1, 'Price': 138.2,
+                'SubGridData': [
+                    { Souvenir: 'Poster', Quantity: 2 },
+                    { Souvenir: 'Song Lyrics', Quantity: 1 },
+                    { Souvenir: 'Photo Gallary', Quantity: 3 }
+                ]
+            }
+        ],
+        useSubPanel: true,
+        subPanelBuilder: function (cell, uniqueIndex) {
+            // Create a table object and add to sub panel
+            var subgrid = $('<table></table>').attr('id', 'tblSubGrid_' + uniqueIndex).appendTo(cell);
+            // Optional. Add a class which is the CSS scope specified when you download jQuery UI
+            subgrid.addClass('alternate');
+            // Initial the sub grid
+            subgrid.appendGrid({
+                initRows: 0,
+                hideRowNumColumn: true,
+                columns: [
+                    { name: 'Souvenir', display: 'Souvenir', ctrlCss: { 'width': '200px'} },
+                    { name: 'Quantity', display: 'Quantity', ctrlCss: { 'width': '60px', 'text-align': 'right' }, value: 1 }
+                ]
+            });
+        },
+        subPanelGetter: function (uniqueIndex) {
+            // Return the sub grid value inside sub panel for `getAllValue` and `getRowValue` methods
+            return $('#tblSubGrid_' + uniqueIndex).appendGrid('getAllValue', true);
+        },
+        rowDataLoaded: function (caller, record, rowIndex, uniqueIndex) {
+            // Check SubGridData exist in the record data
+            if (record.SubGridData) {
+                // Fill the sub grid
+                $('#tblSubGrid_' + uniqueIndex, caller).appendGrid('load', record.SubGridData);
+            }
+        }
+    });
+    $('#btnGetAllValue1').button().on('click', function () {
+        // Get grid values in array mode
+        var allData = $('#tblAppendGrid').appendGrid('getAllValue');
+        alert(JSON.stringify(allData));
+    });
+    $('#btnGetAllValue2').button().on('click', function () {
+        // Get grid values in object mode
+        var allData = $('#tblAppendGrid').appendGrid('getAllValue', true);
+        alert(JSON.stringify(allData));
+    });
+});
+  </script>
+  <form action="" method="post">
+<table id="tblAppendGrid">
+</table>
+<br />
+<button id="btnGetAllValue1" type="button">
+    Demo: getAllValue, Array Mode</button>
+<button id="btnGetAllValue2" type="button">
+    Demo: getAllValue, Object Mode</button>
+  </form>
+  </body>
+</html>

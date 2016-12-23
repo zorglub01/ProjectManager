@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>appendGrid</title>
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.structure.min.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.theme.min.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery.appendGrid-1.6.2.css" />
+
+<script type="text/javascript"	src="/ProjectManager/jquery-1.11.1.min.js"></script>
+<script type="text/javascript"	src="/ProjectManager/jquery-ui-1.11.1.min.js"></script>
+<script type="text/javascript"	src="/ProjectManager/jquery.appendGrid-1.6.2.js"></script>
+<script id="jsSource" type="text/javascript">
+$(document).ready(function () {
+    // Initialize appendGrid
+    $('#tblAppendGrid').appendGrid({
+        caption: 'My CD Collections',
+        initRows: 1,
+        columns: [
+            { name: 'Album', display: 'Album', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '160px'} },
+            { name: 'Year', display: 'Year', type: 'ui-spinner', ctrlAttr: { maxlength: 4 }, ctrlCss: { width: '40px' }, uiOption: { min: 2000} },
+            { name: 'Poster', display: 'With Poster?', type: 'checkbox', onClick: function (evt, rowIndex) { alert('You have clicked on the `With Poster?` at row ' + rowIndex); } },
+            { name: 'Price', display: 'Price', type: 'text', ctrlAttr: { maxlength: 10 }, ctrlCss: { width: '50px', 'text-align': 'right' }, value: 0 }
+        ],
+        initData: [
+            { 'Album': 'Kelly Chen Music is Live Concert', 'Year': '2002', 'Poster': true, 'Price': 110 },
+            { 'Album': 'Best Collection Super Audio CD', 'Year': '2003', 'Poster': true, 'Price': 220.5 },
+            { 'Album': 'Kelly Chen Love Fighters Concert 2008', 'Year': '2008', 'Poster': false, 'Price': 316 },
+            { 'Album': 'Kelly Chen Collection 1995-2000', 'Year': '2011', 'Poster': true, 'Price': 280 },
+            { 'Album': 'Reflection', 'Year': '2013', 'Poster': false, 'Price': 138.2 }
+        ]
+    });
+    // Dummy: Handle save button clicked
+    $('#btnSave').button().click(function () {
+        alert('You have pressed the save button! You can submit this form directly to server or use the `getAllValue` function for preparing AJAX request!');
+        return false;
+    });
+});
+  </script>
+  </head>
+  <body>
+  
+  <form action="" method="post">
+<div class="ui-widget-content" style="padding: 12px;">
+    <table>
+    <tbody>
+        <tr>
+            <td style="width: 120px;">Artist</td>
+            <td>
+                <input type="text" name="txtArtist" maxlength="100" value="Kelly Chen" />
+            </td>
+        </tr>
+        <tr>
+            <td>Origin</td>
+            <td>
+                <select name="ddlOrigin">
+                    <option value="0">{Choose One}</option>
+                    <option value="1" selected="selected">Hong Kong</option>
+                    <option value="2">Taiwan</option>
+                    <option value="3">Japan</option>
+                    <option value="4">Korea</option>
+                    <option value="5">US</option>
+                    <option value="6">Others</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Birthday</td>
+            <td>
+                <select name="ddlBirthdayDay" style="width: 80px;">
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13" selected="selected">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                </select>
+                <select name="ddlBirthdayMonth" style="width: 80px;">
+                    <option value="1">Jan</option>
+                    <option value="2">Feb</option>
+                    <option value="3">Mar</option>
+                    <option value="4">Apr</option>
+                    <option value="5">May</option>
+                    <option value="6">Jun</option>
+                    <option value="7">Jul</option>
+                    <option value="8">Aug</option>
+                    <option value="9" selected="selected">Sep</option>
+                    <option value="10">Oct</option>
+                    <option value="11">Nov</option>
+                    <option value="12">Dec</option>
+                </select>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+    <br />
+    <table id="tblAppendGrid">
+    </table>
+    <br />
+    <button id="btnSave" type="button">Save</button>
+</div>
+  </form>
+  </body>
+</html>
