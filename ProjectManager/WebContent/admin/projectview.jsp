@@ -44,8 +44,9 @@ $(document).ready(function () {
             { name: 'keyId', display: '#Key', type: 'text'},
             { name: 'name', display: 'name', type: 'text'},
             { name: 'shortName', display: 'shortName', type: 'text'},
-            { name: 'startDate', display: 'startDate', type: 'date'},
-            { name: 'endDate', display: 'endDate', type: 'date'},
+            { name: 'description', display: 'description', type: 'text'},
+            { name: 'startDate', display: 'startDate', type: 'ui-datepicker', uiOption: {dateFormat: 'yy-mm-dd'}},
+            { name: 'endDate', display: 'endDate', type: 'ui-datepicker', uiOption: {dateFormat: 'yy-mm-dd'}},
             { name: 'nbPhase', display: 'nbSprint', type: 'number'}
             ],
          initData:mydata
@@ -59,12 +60,7 @@ $(document).ready(function () {
         $('input[id*="bbButonId"]').click();
     });
     
-    $('#btnLoad').button().click(function () {
-    	var datalocal=[
-            { 'localFile': 'C:\\Test\\file.xml'}
-        ];
-        $('#tblAppendGrid').appendGrid('load', datalocal);
-    });
+    
     
     $('#btnLoad1').button().click(function () {
     	var mydata1=$('textarea[id*="beandata"]').val();
@@ -90,13 +86,13 @@ $(document).ready(function () {
 		<table id="tblAppendGrid" style="width:100%"></table>
     
 	    <button id="btnSave" type="button">Save</button>
-	    <button id="btnLoad" type="button">Load</button>
+	    
 	    <button id="btnLoad1" type="button">Load from text</button>
 	</div>
 	<div class="ui-widget-content">	
 	<h:form id="bbForm">
 		<h:inputTextarea id="beandata"  value="#{projectBeanWrapper.projectListAsJson}"></h:inputTextarea>
-		<h:commandButton id="bbButonId" value="Load the file"	action="#{projectBeanWrapper.saveProfiles}" style="display:none"/>
+		<h:commandButton id="bbButonId" value="Load the file"	action="#{projectBeanWrapper.saveProject}" style="display:none"/>
 	</h:form>
 	</div>
 	</body>

@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -20,6 +19,7 @@ import org.apache.myfaces.custom.fileupload.UploadedFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.services.credentials.profiles.DAOProfile;
+import com.services.projects.bean.DAOProject;
 
 /**
  * @author thomas.foret
@@ -30,7 +30,7 @@ public class UploadFileBean {
 	private UploadedFile uploadedFile;
 	private boolean success;
 	private boolean failure;
-	private String scope;
+	
 
 	/**
 	 * @return the dbContentOverview
@@ -38,14 +38,18 @@ public class UploadFileBean {
 	public String getFileScan() {
 		String _res = "Error";
 		String _scope = this.getScope();
-		if (DAOProfile.getHTTP_UPLOAD_PARAM_VAL().equalsIgnoreCase(_scope)) {
-			try {
+		try{
+			if (DAOProfile.getInstance().getHTTP_UPLOAD_PARAM_VAL().equalsIgnoreCase(_scope)) {
 				_res = DAOProfile.getInstance().scanDbFile();
-			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			}else if (DAOProject.getInstance().getHTTP_UPLOAD_PARAM_VAL().equalsIgnoreCase(_scope)) {
+				_res = DAOProject.getInstance().scanDbFile();
 			}
+			
+		}catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 		return _res;
 	}
 
@@ -73,7 +77,7 @@ public class UploadFileBean {
 	public void setScope(String scope) {
 		HttpSession _session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		 _session.setAttribute("scope",scope);
-		this.scope = scope;
+		
 	}
 
 	public String upload() {
@@ -86,9 +90,12 @@ public class UploadFileBean {
 			String extension = FilenameUtils.getExtension(uploadedFile.getName());
 			
 			String _scope = this.getScope();
-			if(DAOProfile.getHTTP_UPLOAD_PARAM_VAL().equals(_scope)){
+			if(DAOProfile.getInstance().getHTTP_UPLOAD_PARAM_VAL().equals(_scope)){
 				DAOProfile.getInstance().importFile(stream,filename);
-			}else{
+			}if(DAOProject.getInstance().getHTTP_UPLOAD_PARAM_VAL().equals(_scope)){
+				DAOProject.getInstance().importFile(stream,filename);
+			}
+			else{
 				ServletContext cContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
 				
 				String rootCtxPath =  cContext.getRealPath("/");
