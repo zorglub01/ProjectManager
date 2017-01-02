@@ -10,10 +10,13 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBException;
 
 import com.services.credentials.CredentialsManager;
+import com.services.credentials.profiles.DAOProfile;
+import com.services.projects.bean.DAOProject;
 
 /**
  * @author thomas.foret
@@ -57,9 +60,11 @@ public class LoginBean {
 	  System.out.println(this.getNom() +"/" + this.getMdp() );
 	  FacesContext fCtx = FacesContext.getCurrentInstance();
 	  HttpSession session = (HttpSession )fCtx.getExternalContext().getSession(true);
-	  
+	  ServletContext cContext = (ServletContext)fCtx.getExternalContext().getContext();
+	  String _rootPathApp = cContext.getRealPath("/");
 	  try {
-		  
+		DAOProfile.getInstance(_rootPathApp);
+		DAOProject.getInstance(_rootPathApp);
 		this.menuItems = CredentialsManager.getMenuEntry(session,this);
 	} catch (URISyntaxException e) {
 		// TODO Auto-generated catch block

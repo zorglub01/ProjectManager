@@ -1,9 +1,6 @@
 package com.services;
 
-import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Set;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -12,14 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
 
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.services.credentials.profiles.DAOProfile;
 import com.services.credentials.profiles.UserProfile;
-import com.services.projects.model.Profile;
-import com.services.projects.utils.ModelManagerHelper;
 
 /**
  * Servlet implementation class ProfileManager
@@ -67,6 +58,7 @@ public class ProfileManager extends HttpCRUDControler {
 	public JsonJtableWrapper createModel(HttpServletRequest request, JsonJtableWrapper _res) throws JAXBException {
 			
 			
+			@SuppressWarnings("unchecked")
 			UserProfile newProfile = DAOProfile.getInstance().create(request.getParameterMap());
 			_res.setRecord(newProfile.getProfile());
 			_res.setResult("OK");

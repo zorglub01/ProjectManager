@@ -41,6 +41,12 @@
 		<managed-bean-class>com.services.UploadFileBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<description>Project handler</description>
+		<managed-bean-name>projectBeanWrapper</managed-bean-name>
+		<managed-bean-class>com.services.projects.bean.ProjectBeanWrapper</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 	
 
 	<application>

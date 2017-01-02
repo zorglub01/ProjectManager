@@ -55,6 +55,17 @@ jQuery(document).ready(function () {
 						</li>
 					</ul>
 				</div>
+				<h3>Project Settings</h3>
+				<div>
+					<ul>
+						<li>
+							<a href="/ProjectManager/admin/projectview.faces" target="credAdminFrame">New Project Setup</a>
+						</li>
+						<li>
+							<a href="/ProjectManager/admin/uploadpage.faces?scope=project" target="credAdminFrame">Import-Export</a>
+						</li>
+					</ul>
+				</div>
 				<h3> Sample</h3>
 				<div>
 					<ul>
@@ -65,7 +76,7 @@ jQuery(document).ready(function () {
 							<a href="/ProjectManager/sample1/sample.html" target="credAdminFrame">Sample1</a>
 						</li>
 						<li>
-							<a href="/ProjectManager/sample2/sample.html" target="credAdminFrame">Sample1</a>
+							<a href="/ProjectManager/sample2/sample.html" target="credAdminFrame">Sample2</a>
 						</li>
 					</ul>
 				</div>

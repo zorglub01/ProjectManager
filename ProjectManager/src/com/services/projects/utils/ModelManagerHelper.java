@@ -4,13 +4,18 @@
 package com.services.projects.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -18,14 +23,18 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.services.JsonJtableWrapper;
+import com.services.projects.bean.JsonProjectWrapper;
 import com.services.projects.model.Profile;
 import com.services.projects.model.Project;
 import com.services.projects.model.Task;
@@ -36,7 +45,34 @@ import com.services.projects.model.Task;
  */
 public class ModelManagerHelper{
 	
+	
+	/**
+	 * return a path for the xml file denoted by the DBobject passed as param and 
+	 * the DBManager or DAO in charge of the object.
+	 * The path is : DBManager.getUrlDbPath()/DBObject.getPrefixPathName()"_"DBObject.getPrimaryKeyId()"."DBObject.getExtensionPathName()
+	 * 
+	 * @param _dbobject
+	 * @param _dbmgr
+	 * @return
+	 */
+	public static Path getFilePath(DBObject _dbobject, DBManager _dbmgr){
+		String filename = _dbmgr.getPrefixPathName()+"_"+_dbobject.getPrimaryKeyId();
+		String extension = _dbmgr.getExtensionPathName();
+		String _dbpath = _dbmgr.getUrlDbPath();
+		String _tmpFilePath = _dbpath + "/"+filename + "."+extension;
+		Path filePath = Paths.get(_tmpFilePath);
+		return filePath;
+	}
+	
+	public static String getFileScanAsJson(DBManager _dbMgr) throws JsonProcessingException{
+		Path folder = Paths.get(_dbMgr.getUrlDbPath());
+		String _res = ModelManagerHelper.getFileScanAsJson(folder);
+		return _res;
+	}
+	
+	
 	public static String getFileScanAsJson(Path _rootDir) throws JsonProcessingException{
+		@SuppressWarnings("unchecked")
 		Collection<File> _files = FileUtils.listFiles(_rootDir.toFile(), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
 		ArrayList<JsonFileWrapper> _list = new ArrayList<JsonFileWrapper>();
 		for(File _file: _files){
@@ -50,11 +86,33 @@ public class ModelManagerHelper{
 		return jsonInString ;		
 	}
 	
+	public static <T> T getObjectFromJson(String jsonInString,Class<T> clazz) throws JsonParseException, JsonMappingException, IOException{
+		ObjectMapper mymapper = new ObjectMapper();
+		mymapper.setVisibility(PropertyAccessor.GETTER, Visibility.PROTECTED_AND_PUBLIC);
+		
+		T _res = (T)mymapper.readValue(jsonInString, clazz);
+		return _res;
+	}
+	
+	
+	public static <T> List<T> getObjectListFromJson(String jsonInString,Class<T> clazz) throws JsonParseException, JsonMappingException, IOException{
+		ObjectMapper mymapper = new ObjectMapper();
+		mymapper.setVisibility(PropertyAccessor.GETTER, Visibility.PROTECTED_AND_PUBLIC);
+		mymapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		com.fasterxml.jackson.databind.type.CollectionType _colType = mymapper.getTypeFactory().constructCollectionType(List.class, clazz);
+		List<T> _res = mymapper.readValue(jsonInString, _colType);
+		return _res;
+	}
+	
 	
 	public static String getJsonStream(Object _object) throws JsonProcessingException{
 
 		ObjectMapper mymapper = new ObjectMapper();
 		mymapper.setVisibility(PropertyAccessor.GETTER, Visibility.PROTECTED_AND_PUBLIC);
+		mymapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mymapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); 
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		mymapper.setDateFormat(df);
 		String jsonInString = mymapper.writeValueAsString(_object);
 		System.out.println(jsonInString);
 		return jsonInString ;
@@ -119,6 +177,32 @@ public class ModelManagerHelper{
 		
 		testFileScan();
 		
+		testJsonMessage();
+	}
+	
+	private static void testJsonMessage(){
+		System.out.println("TESTING JSON ARRAY to OBJECT");
+		
+		URL resource = ClassLoader.getSystemResource("com/lang/util/msg.properties");
+		Properties _prop  = new Properties();
+		
+		try {
+			_prop.load(resource.openStream());
+			List<JsonProjectWrapper> _res = getObjectListFromJson(_prop.getProperty("project_list"),JsonProjectWrapper.class);
+			for (JsonProjectWrapper jsonProjectWrapper : _res) {
+				System.out.println(jsonProjectWrapper.getName());
+			}
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	private static void testFileScan() {
@@ -126,6 +210,7 @@ public class ModelManagerHelper{
 		try {
 			Path _rootPath = Paths.get(taskXmlUrl.toURI());
 			String _res = getFileScanAsJson(_rootPath);
+			System.out.println(_res);
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

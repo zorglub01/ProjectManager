@@ -3,28 +3,23 @@
  */
 package com.services.credentials.profiles;
 
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.TreeMap;
 
 import javax.faces.context.FacesContext;
-import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.xml.bind.JAXBException;
 
 import com.services.credentials.ResourceEntry;
 import com.services.projects.model.Profile;
 import com.services.projects.model.ProfileURI;
-import com.services.projects.utils.ModelManagerHelper;
+import com.services.projects.utils.DBObject;
 
 /**
  * @author thomas.foret
  *
  */
-public class UserProfile {
+public class UserProfile implements DBObject {
 	
 	public static final String HTTP_PARAM_ResourcePath="path";
 	
@@ -134,6 +129,10 @@ public class UserProfile {
 			index++;
 		}
 		return _res;
+		
+	}
+	public String getPrimaryKeyId() {
+		return this.getProfileName();
 		
 	}
 	

@@ -30,13 +30,14 @@ import com.services.projects.model.Credentials;
 import com.services.projects.model.Profile;
 import com.services.projects.model.ProfileURI;
 import com.services.projects.model.Right;
+import com.services.projects.utils.DBManager;
 import com.services.projects.utils.ModelManagerHelper;
 
 /**
  * @author thomas
  *
  */
-public class DAOProfile {
+public class DAOProfile implements DBManager{
 	private static final String PROFILE_DEFAULT = "Default";
 	private static DAOProfile instance=null;
 	/**
@@ -81,12 +82,13 @@ public class DAOProfile {
 			repository = new TreeMap<String, Path>();
 			System.out.println(urlDbPath);
 			Path folder = Paths.get(urlDbPath);
+			@SuppressWarnings("unchecked")
 			Collection<File> _files = FileUtils.listFiles(folder.toFile(), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
 			for (File file : _files) {
 				System.out.println(file.getPath());
 				String _name  = FilenameUtils.getBaseName(file.getName());
 				String _ext  = FilenameUtils.getExtension(file.getName());
-				if(_ext.equalsIgnoreCase("xml") && _name.startsWith("profile_")){
+				if(_ext.equalsIgnoreCase("xml") && _name.startsWith(HTTP_UPLOAD_PARAM_VAL+"_")){
 					String[] _tmp = _name.split("_"); 
 					repository.put(_tmp[1], Paths.get(file.toURI()));
 				}
@@ -97,9 +99,13 @@ public class DAOProfile {
 		return 	instance;		
 	}
 	
+	/**
+	 * Scan the DB directory and send back the result as a Json string.
+	 * @return Json string 
+	 * @throws JsonProcessingException
+	 */
 	public String scanDbFile() throws JsonProcessingException{
-		Path folder = Paths.get(urlDbPath);
-		String _res = ModelManagerHelper.getFileScanAsJson(folder);
+		String _res = ModelManagerHelper.getFileScanAsJson(this);
 		return _res;
 	}
 	
@@ -109,11 +115,10 @@ public class DAOProfile {
 	}
 	
 	public List<UserProfile> getRegisterProfiles(){
-		ArrayList<UserProfile> _res = new ArrayList<UserProfile>();
-		for (String profilename : repository.keySet()) {
-			UserProfile _tmp = findProfileByName(profilename);
-			_res.add(_tmp);
-		}
+		
+		List<UserProfile> _res = this.<UserProfile>getRegisteredObjects(UserProfile.class);
+		
+		
 		return _res;
 	}
 
@@ -188,14 +193,26 @@ public class DAOProfile {
 	        return out.toString("ISO-8859-1");
 	    }
 	
+	/**
+	 * @param usrProfile
+	 * @deprecated
+	 * @return
+	 */
 	private static Path getFilePath(UserProfile usrProfile){
-		String filename = "profile_"+usrProfile.getProfileName();
-		String extension = "xml";
-		String _tmpFilePath = urlDbPath + "/"+filename + "."+extension;
-		Path filePath = Paths.get(_tmpFilePath);
+		//String filename = "profile_"+usrProfile.getProfileName();
+		//String extension = "xml";
+		//String _tmpFilePath = urlDbPath + "/"+filename + "."+extension;
+		//Path filePath = Paths.get(_tmpFilePath);
+		Path filePath = ModelManagerHelper.getFilePath(usrProfile, getInstance());
 		return filePath;
 	}
 
+	/**
+	 * @param _res
+	 * @param filePathToSave if the param is null i.e you are in update mode, if not create mode
+	 * @throws IOException
+	 * @throws JAXBException
+	 */
 	private void saveProfile(UserProfile _res, Path  filePathToSave) throws IOException, JAXBException {	
 		Path file=null;
 		
@@ -268,15 +285,15 @@ public class DAOProfile {
 	/**
 	 * @return the hTTP_UPLOAD_PARAM_VAL
 	 */
-	public static String getHTTP_UPLOAD_PARAM_VAL() {
+	public  String getHTTP_UPLOAD_PARAM_VAL() {
 		return HTTP_UPLOAD_PARAM_VAL;
 	}
 
 	public void importFile(InputStream stream, String filename) throws IOException, JAXBException {
 		
 		String extension = "tmp";
-		String _pathToSave = urlDbPath ;
-		Path _path = Paths.get(_pathToSave);
+		
+		Path _path = Paths.get(this.getUrlDbPath());
 		Path _fileTmp = Files.createTempFile(_path, filename + "_", "." + extension);
 		Files.copy(stream, _fileTmp, StandardCopyOption.REPLACE_EXISTING);
 		Profile _res = ModelManagerHelper.<Profile>loadModel(_fileTmp.toFile(), Profile.class);
@@ -291,6 +308,30 @@ public class DAOProfile {
 			this.saveProfile(_upTmp, _newFilePath);
 		}
 		Files.deleteIfExists(_fileTmp);
+	}
+
+	public String getPrefixPathName() {
+		// TODO Auto-generated method stub
+		return "profile";
+	}
+
+	public String getUrlDbPath() {
+		// TODO Auto-generated method stub
+		return urlDbPath;
+	}
+
+	public String getExtensionPathName() {
+		// TODO Auto-generated method stub
+		return "xml";
+	}
+
+	public <T> List<T> getRegisteredObjects(Class<T> t) {
+		ArrayList<UserProfile> _res = new ArrayList<UserProfile>();
+		for (String profilename : repository.keySet()) {
+			UserProfile _tmp = findProfileByName(profilename);
+			_res.add(_tmp);
+		}
+		return (List<T>) _res;
 	}
 
 	

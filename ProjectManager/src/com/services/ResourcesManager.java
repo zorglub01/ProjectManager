@@ -1,24 +1,14 @@
 package com.services;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.services.credentials.profiles.DAOProfile;
 import com.services.credentials.profiles.UserProfile;
-import com.services.projects.model.Profile;
 import com.services.projects.model.ProfileURI;
-import com.services.projects.model.Resource;
-import com.services.projects.utils.ModelManagerHelper;
 
 /**
  * Servlet implementation class ResourcesManager
@@ -35,6 +25,7 @@ public class ResourcesManager extends HttpCRUDControler {
     }
 
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public JsonJtableWrapper deleteModel(HttpServletRequest request, JsonJtableWrapper _res) throws JAXBException {
 		String _profileId = request.getParameter("id");
@@ -55,6 +46,7 @@ public class ResourcesManager extends HttpCRUDControler {
 		return this.createModel(request, _res);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public JsonJtableWrapper createModel(HttpServletRequest request, JsonJtableWrapper _res) throws JAXBException {
 		String _profileId = request.getParameter("id");
