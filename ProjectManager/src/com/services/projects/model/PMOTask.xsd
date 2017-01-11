@@ -63,15 +63,14 @@
 			<enumeration value="InProgress"></enumeration>
 			<enumeration value="Closed"></enumeration>
 			<enumeration value="Rejected"></enumeration>
-			<enumeration value="Suspended"></enumeration>
+			<enumeration value="Pending"></enumeration>
 		</restriction>
 	</simpleType>
 
 
 	<complexType name="status">
-		<attribute name="currentState" type="tns:state" default="New"
-			form="qualified">
-		</attribute>
+		<attribute name="prevState" type="tns:state" default="New" form="qualified"></attribute>
+		<attribute name="currentState" type="tns:state" default="New" form="qualified"></attribute>
 		<attribute name="upDate" type="date"></attribute>
 	</complexType>
 </schema>

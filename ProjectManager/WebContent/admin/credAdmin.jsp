@@ -21,7 +21,7 @@
 <script>
 jQuery(document).ready(function () {
     $("#credAdminMenu").accordion();
-    $("#credAdminFrame").attr("src", "/ProjectManager/admin/profileview.faces");
+    //$("#credAdminFrame").attr("src", "/ProjectManager/admin/profileview.faces");
 });
   </script> 
 </head>

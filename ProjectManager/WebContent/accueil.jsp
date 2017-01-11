@@ -45,20 +45,22 @@
 			  		<li>
 			  			<t:htmlTag value="a">
 							<f:param name="data-url" value="#{menuEntry.value}" />
-							<f:param name="href" value="#{menuEntry.value}" />
-							<f:param name="class" value="accueiltabs" />
+							<f:param name="href" value="#About" />
+							<f:param name="class" value="accueiltabs1" />
 							<h:outputText value="#{menuEntry.label }"/>
 						</t:htmlTag>
 			  		</li>
 			  	</c:forEach>
-			    <li><a href="#About" data-url="help page" class="accueiltabs">About</a></li>    
+			    <li><a href="#About" data-url="/ProjectManager/help/help.faces" class="accueiltabs1">About</a></li>    
 			  </ul>	
-			  <div id="About"> Help pages for the project manager software</div>		    
+			  <div id="About"></div>		    
 			</div>	
 		</td>
 		
 	</tr>
-	
+	<tr>
+		<td><iframe id="globalContentFrm" name="globalContentFrm"  style="width: 100%; height: 2000px; border-width: 1;"></iframe></td>
+	</tr>
 </tbody>
 </table>
 
@@ -75,9 +77,10 @@
     
     $('.accueiltabs1').click(function(){
     	var $this = $(this);
-    	alert($this.attr('href') +" / " + $this.attr('data-url') + "/" + $this.data('url'));
-    	$('#accueilcontent').load($this.data('url'));
-    	return false;
+    	//alert($this.attr('href') +" / " + $this.attr('data-url') + "/" + $this.data('url'));
+    	$('#globalContentFrm').attr("src", $this.data('url'));
+    	//$('#globalContentFrm').load($this.data('url'));
+    	
     });
     
  

@@ -23,7 +23,9 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.services.credentials.profiles.UserProfile;
+import com.services.projects.model.Phases;
 import com.services.projects.model.Project;
+import com.services.projects.model.Sprint;
 import com.services.projects.utils.DBManager;
 import com.services.projects.utils.ModelManagerHelper;
 
@@ -167,8 +169,17 @@ public class DAOProject implements DBManager {
 		}
 		_tmpProject.setName(_project.getName());
 		_tmpProject.setDescription(_project.getDescription());
+		Phases _newProjPhases = _project.getProject().getPhases();
+		if(_newProjPhases != null){
+			List<Sprint> _SprintList = _newProjPhases.getPhase();
+			boolean _resTmp = _tmpProject.getProject().getPhases().getPhase().retainAll(_SprintList);
+			_tmpProject.getProject().getPhases().getPhase().addAll(_SprintList);
+			
+		}
+		
 		_tmpProject.getFirstSprint().setStartDate(_project.getStartDate());
 		_tmpProject.getLastSprint().setEndDate(_project.getEndDate());
+		
 		
 		Path _fileToSave = ModelManagerHelper.getFilePath(_tmpProject, this);
 		ModelManagerHelper.<Project>saveModel(_tmpProject.getProject(),_fileToSave.toFile()); 
@@ -235,6 +246,7 @@ public class DAOProject implements DBManager {
 		Files.deleteIfExists(_fileTmp);
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> List<T> getRegisteredObjects(Class<T> t) {
 		ArrayList<JsonProjectWrapper> _res = new ArrayList<JsonProjectWrapper>();
 		for (String profilename : repository.keySet()) {

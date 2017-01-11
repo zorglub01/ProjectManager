@@ -33,6 +33,8 @@ $(document).ready(function () {
     // Dummy: Handle save button clicked
     $('#btnSave').button().click(function () {
         alert('You have pressed the save button! You can submit this form directly to server or use the `getAllValue` function for preparing AJAX request!');
+        var allData = $('#tblAppendGrid').appendGrid('getAllValue');
+        alert(JSON.stringify(allData));
         return false;
     });
 });

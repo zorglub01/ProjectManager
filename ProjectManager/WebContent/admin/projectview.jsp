@@ -52,7 +52,7 @@ $(document).ready(function () {
          initData:mydata
     });
     
-    $('#btnSave').button().on('click', function () {
+    $('#btnSave').button().click(function () {
         // Get grid values in array mode
         var allData = $('#tblAppendGrid').appendGrid('getAllValue');
         alert(JSON.stringify(allData));
