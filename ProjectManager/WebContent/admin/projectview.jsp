@@ -14,13 +14,14 @@
 	
 	<head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.structure.min.css" />
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.theme.min.css" />
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery.appendGrid-1.6.2.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/script/jquery/jquery-ui.structure.min.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/script/jquery/jquery-ui.theme.min.css" />
+<script type="text/javascript"	src="/ProjectManager/script/jquery/jquery-1.11.1.min.js"></script>
+<script type="text/javascript"	src="/ProjectManager/script/jquery/jquery-ui-1.11.1.min.js"></script>
 
-<script type="text/javascript"	src="/ProjectManager/jquery-1.11.1.min.js"></script>
-<script type="text/javascript"	src="/ProjectManager/jquery-ui-1.11.1.min.js"></script>
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery.appendGrid-1.6.2.css" />
 <script type="text/javascript"	src="/ProjectManager/jquery.appendGrid-1.6.2.js"></script>
+
 
 <script type="text/javascript">
 
@@ -55,7 +56,7 @@ $(document).ready(function () {
     $('#btnSave').button().click(function () {
         // Get grid values in array mode
         var allData = $('#tblAppendGrid').appendGrid('getAllValue');
-        alert(JSON.stringify(allData));
+        //alert(JSON.stringify(allData));
         $('textarea[id*="beandata"]').val(JSON.stringify(allData));
         $('input[id*="bbButonId"]').click();
     });
@@ -87,11 +88,11 @@ $(document).ready(function () {
     
 	    <button id="btnSave" type="button">Save</button>
 	    
-	    <button id="btnLoad1" type="button">Load from text</button>
+	    <button id="btnLoad1" type="button" style="display:none">Load from text</button>
 	</div>
 	<div class="ui-widget-content">	
 	<h:form id="bbForm">
-		<h:inputTextarea id="beandata"  value="#{projectBeanWrapper.projectListAsJson}"></h:inputTextarea>
+		<h:inputTextarea id="beandata"  value="#{projectBeanWrapper.projectListAsJson}" style="display:none"></h:inputTextarea>
 		<h:commandButton id="bbButonId" value="Load the file"	action="#{projectBeanWrapper.saveProject}" style="display:none"/>
 	</h:form>
 	</div>

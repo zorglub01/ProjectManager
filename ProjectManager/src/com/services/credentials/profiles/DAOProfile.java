@@ -37,7 +37,7 @@ import com.services.projects.utils.ModelManagerHelper;
  * @author thomas
  *
  */
-public class DAOProfile implements DBManager{
+public class DAOProfile implements DBManager<UserProfile>{
 	private static final String PROFILE_DEFAULT = "Default";
 	private static DAOProfile instance=null;
 	/**
@@ -58,12 +58,7 @@ public class DAOProfile implements DBManager{
 		this.mapParamList.add("name");
 	}
 	
-	/**
-	 * @return the mapParamList
-	 */
-	private synchronized ArrayList<String> getMapParamList() {
-		return mapParamList;
-	}
+	
 
 	/**
 	 * Initial the DAO based on the root DB directory folder
@@ -76,25 +71,8 @@ public class DAOProfile implements DBManager{
 			return instance;
 		}else{
 			instance = new DAOProfile();
-			String _endSep="";
-			if(!rootCtxPath.endsWith("/"))_endSep="/";
-			urlDbPath=rootCtxPath+_endSep+DB_PATH;
-			repository = new TreeMap<String, Path>();
-			System.out.println(urlDbPath);
-			Path folder = Paths.get(urlDbPath);
-			@SuppressWarnings("unchecked")
-			Collection<File> _files = FileUtils.listFiles(folder.toFile(), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-			for (File file : _files) {
-				System.out.println(file.getPath());
-				String _name  = FilenameUtils.getBaseName(file.getName());
-				String _ext  = FilenameUtils.getExtension(file.getName());
-				if(_ext.equalsIgnoreCase("xml") && _name.startsWith(HTTP_UPLOAD_PARAM_VAL+"_")){
-					String[] _tmp = _name.split("_"); 
-					repository.put(_tmp[1], Paths.get(file.toURI()));
-				}
-				
-			}
-			
+			instance = (DAOProfile)ModelManagerHelper.initDaoInstance(rootCtxPath,instance);
+						
 		}
 		return 	instance;		
 	}
@@ -114,15 +92,23 @@ public class DAOProfile implements DBManager{
 		return instance;
 	}
 	
+	/**
+	 * @return
+	 * @deprecated : use {@link #getRegisteredObjects()}
+	 */
 	public List<UserProfile> getRegisterProfiles(){
 		
-		List<UserProfile> _res = this.<UserProfile>getRegisteredObjects(UserProfile.class);
-		
-		
+		return this.getRegisteredObjects();
+	}
+	
+	public UserProfile findByPrimaryKey(UserProfile _obj) {
+		UserProfile _res = this.findProfileByName(_obj.getPrimaryKeyId());
 		return _res;
 	}
 
-	public UserProfile findProfileByName(String name) {		
+	
+
+	private UserProfile findProfileByName(String name) {		
 		Path _filepath = repository.get(name);
 		UserProfile _res1=null;
 		try {
@@ -199,10 +185,7 @@ public class DAOProfile implements DBManager{
 	 * @return
 	 */
 	private static Path getFilePath(UserProfile usrProfile){
-		//String filename = "profile_"+usrProfile.getProfileName();
-		//String extension = "xml";
-		//String _tmpFilePath = urlDbPath + "/"+filename + "."+extension;
-		//Path filePath = Paths.get(_tmpFilePath);
+		
 		Path filePath = ModelManagerHelper.getFilePath(usrProfile, getInstance());
 		return filePath;
 	}
@@ -317,23 +300,43 @@ public class DAOProfile implements DBManager{
 
 	public String getUrlDbPath() {
 		// TODO Auto-generated method stub
-		return urlDbPath;
+		return DAOProfile.urlDbPath;
 	}
 
 	public String getExtensionPathName() {
-		// TODO Auto-generated method stub
 		return "xml";
 	}
 
-	public <T> List<T> getRegisteredObjects(Class<T> t) {
-		ArrayList<UserProfile> _res = new ArrayList<UserProfile>();
-		for (String profilename : repository.keySet()) {
+	
+	public List<UserProfile> getRegisteredObjects() {
+		List<UserProfile> _res = new ArrayList<UserProfile>();
+		for (String profilename : getInstance().getRepository().keySet()) {
 			UserProfile _tmp = findProfileByName(profilename);
 			_res.add(_tmp);
 		}
-		return (List<T>) _res;
+		return _res;
 	}
 
+	public String getDBPath() {
+		return DAOProfile.DB_PATH;
+	}
+
+	public void setUrlDbPath(String _dbPath) {
+		DAOProfile.urlDbPath=_dbPath;
+		System.out.println(DAOProfile.urlDbPath);
+		
+	}
+
+	public TreeMap<String, Path> getRepository() {
+		if(DAOProfile.repository == null){
+			DAOProfile.repository = new TreeMap<String, Path>();
+		}
+		return DAOProfile.repository;
+	}
+
+
+
+	
 	
 	
 }

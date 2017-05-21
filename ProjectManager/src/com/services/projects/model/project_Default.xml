@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:Project shortName="Default" ns1:keyId="0" xmlns:ns1="http://www.example.org/PMOTask" xmlns:ns2="http://www.example.org/PMOProject">
+    <ns1:Description>Default project as template</ns1:Description>
+    <ns2:Name>DefaultProject</ns2:Name>
+    <ns2:Phases>
+        <ns2:phase ns1:keyId="Backlog">
+            <ns2:name>Backlog</ns2:name>
+            <ns2:startDate>2017-01-02</ns2:startDate>
+            <ns2:endDate>2017-01-31</ns2:endDate>
+            <ns2:taskList>
+                <ns1:Task Id="Backlog.KickOff">
+                    <Name>KickOff</Name>
+                    <ns1:Description>T1 Desc</ns1:Description>
+                    <ns1:Metric ns1:keyId="0">
+                        <ns1:Description>Metric desc</ns1:Description>
+                        <estimate>
+                            <wlSup>3</wlSup>
+                            <wlInf>8</wlInf>
+                            <startDate>2017-01-02</startDate>
+                            <endDate>2017-01-02</endDate>
+                        </estimate>
+                    </ns1:Metric>
+                    <Status upDate="2001-01-01" ns1:currentState="New"  	ns1:prevState="New" />
+                    <TrackEntries>
+                    	<ProgressLine>
+                    		<Track>
+                    			<ProgressFactor>0.0</ProgressFactor>
+                    			<TaskOwner>TaskOwner</TaskOwner>
+                    			<TrackTime>2001-01-01</TrackTime>
+                    		</Track>
+                    	</ProgressLine>
+                    	<BudgetLine>
+                    		<Track>
+                    			<ProgressFactor>0.0</ProgressFactor>
+                    			<TaskOwner>TaskOwner</TaskOwner>
+                    			<TrackTime>2001-01-01</TrackTime>
+                    		</Track>
+                    	</BudgetLine>
+</TrackEntries>
+                </ns1:Task>
+                <ns1:Task Id="Backlog.Closing">
+                    <Name>Closing</Name>
+                    <ns1:Description>T2 Desc</ns1:Description>
+                    <ns1:Metric ns1:keyId="0">
+                        <ns1:Description>Metric desc</ns1:Description>
+                        <estimate>
+                            <wlSup>3</wlSup>
+                            <wlInf>8</wlInf>
+                            <startDate>2017-01-31</startDate>
+                            <endDate>2017-01-31</endDate>
+                        </estimate>
+                    </ns1:Metric>
+                    <Status upDate="2001-01-01" ns1:currentState="New" ns1:prevState="New"/><TrackEntries>
+                    	<ProgressLine>
+                    		<Track>
+                    			<ProgressFactor>0.0</ProgressFactor>
+                    			<TaskOwner>TaskOwner</TaskOwner>
+                    			<TrackTime>2001-01-01</TrackTime>
+                    		</Track>
+                    	</ProgressLine>
+                    	<BudgetLine>
+                    		<Track>
+                    			<ProgressFactor>0.0</ProgressFactor>
+                    			<TaskOwner>TaskOwner</TaskOwner>
+                    			<TrackTime>2001-01-01</TrackTime>
+                    		</Track>
+                    	</BudgetLine>
+</TrackEntries>
+                </ns1:Task>
+            </ns2:taskList>
+        </ns2:phase>
+    </ns2:Phases>
+</ns2:Project>

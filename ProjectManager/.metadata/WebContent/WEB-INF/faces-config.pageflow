@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14798295724960" configfile="/ProjectManager/WebContent/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="login" x="72" y="60" id="pf14798296306271" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf14798296306272" path="/login.jsp"/>
-  <nodes xsi:type="pageflow:PFPage" name="accueil" x="192" y="60" id="pf14798296306273" referenceLink="//@navigationRule.1/@fromViewId|" inlinks="pf14798296306272" path="/accueil.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="login" x="72" y="60" id="pf14798296306271" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf14798296306272" path="/login.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="accueil" x="192" y="60" id="pf14798296306273" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf14798296306272" path="/accueil.jsp"/>
   <links id="pf14798296306272" target="pf14798296306273" source="pf14798296306271" outcome="login" redirect="true"/>
 </pageflow:Pageflow>

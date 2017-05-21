@@ -6,6 +6,8 @@ package com.services.projects.utils;
  */
 public interface DBObject {
 
-	String getPrimaryKeyId();
+	public String getPrimaryKeyId();
+	public void setPrimaryKeyId(String _pmKid);
+	
 
 }

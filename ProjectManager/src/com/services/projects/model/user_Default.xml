@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:User KeyId="Default" login="Default" xmlns:tns="http://www.example.org/Profile"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.example.org/Profile Profile.xsd ">
+	<tns:eMail><![CDATA[Default@mail.com]]></tns:eMail>
+	<tns:password><![CDATA[MyPwd]]></tns:password>
+	<tns:FirstName>Default</tns:FirstName>
+	<tns:Profile KeyId="Default" Name="Default">
+		<tns:Resources>
+			<tns:resource>
+				<tns:Credentials>
+					<tns:rights>CREATE</tns:rights>
+				</tns:Credentials>
+				<tns:Path>tns:Path</tns:Path>
+				<tns:Description>tns:Description</tns:Description></tns:resource>
+		</tns:Resources>
+		<tns:Description>tns:Description</tns:Description>
+	</tns:Profile></tns:User>

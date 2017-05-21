@@ -14,17 +14,48 @@
 	
 	<head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.structure.min.css" />
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.theme.min.css" />
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery.appendGrid-1.6.2.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/script/jquery/jquery-ui.structure.min.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/script/jquery/jquery-ui.theme.min.css" />
+<link rel="stylesheet" type="text/css" href="/ProjectManager/script/jquery/jquery-ui.theme.alternate.min.css"/>
+<script type="text/javascript"	src="/ProjectManager/script/jquery/jquery-1.11.1.min.js"></script>
+<script type="text/javascript"	src="/ProjectManager/script/jquery/jquery-ui-1.11.1.min.js"></script>
 
-<script type="text/javascript"	src="/ProjectManager/jquery-1.11.1.min.js"></script>
-<script type="text/javascript"	src="/ProjectManager/jquery-ui-1.11.1.min.js"></script>
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery.appendGrid-1.6.2.css" />
 <script type="text/javascript"	src="/ProjectManager/jquery.appendGrid-1.6.2.js"></script>
 
 <script type="text/javascript">
 
 $(document).ready(function () {
+	//SHow Hide Columns
+	 $('#btnToggle').button().click(function () {
+	    	
+	        var invisible = $('#tblAppendGrid').appendGrid('isColumnInvisible', 'keyId');
+	        var count = $('#tblAppendGrid').appendGrid('getRowCount');
+	        if (invisible) {
+	            $('#tblAppendGrid').appendGrid('showColumn', 'keyId');
+	            $('#btnToggle').val("Hide IDs");
+	            var action='showColumn';
+	            var label="Hide Cols";
+	        } else {
+	            $('#tblAppendGrid').appendGrid('hideColumn', 'keyId');
+	            $('#btnToggle').val("Show IDs");
+	            var action='hideColumn';
+	            var label="Show Cols";
+	        }
+	        $('#tblAppendGrid').appendGrid(action, 'keyId');
+	        $('#btnToggle').val(label);
+	        
+	        for(var z =0; z <count;z++ ){
+	        	var _uniqIndex = $('#tblAppendGrid').appendGrid('getUniqueIndex', z);
+	        	var _subGridId='#tblSubGridTask_'+_uniqIndex;
+	        	$(_subGridId).appendGrid(action, 'id');
+	        	//$(_subGridId).appendGrid(action, 'status.prevState');
+	        	//$(_subGridId).appendGrid(action, 'name');
+	        }
+	    });
+	
+	
+	
     // Initialize appendGrid
     var mydata1 = $('textarea[id*="beandata"]').val();
     //alert(mydata1);
@@ -61,13 +92,24 @@ $(document).ready(function () {
     $('#tblAppendGrid').appendGrid({
         caption: 'Project Sprint list',
         initRows: 1,
+        hideRowNumColumn: false,
+        hideButtons: {
+            append:false,
+            removeLast: true,
+            remove: false,
+            insert:false,
+            moveUp:true,
+            moveDown:true
+        },
         columns: [
+        	{ name: 'keyId', display: '#Sprint', type: 'text',ctrlCss: { width: '100%'},invisible: false},
             { name: 'name', display: 'Sprint name', type: 'text',  ctrlCss: { width: '100%'}},
-            { name: 'startDate', display: 'begin', type: 'ui-datepicker', uiOption: {dateFormat: 'yy-mm-dd'}, onChange:checkSprintEndDate},
-            { name: 'endDate', display: 'end', type: 'ui-datepicker', uiOption: {dateFormat: 'yy-mm-dd'}, onChange:checkSprintStartDate},
-            { name: 'workload', display: 'Budget', type: 'number'}
+            { name: 'startDate', display: 'begin', type: 'ui-datepicker', ctrlCss: { width: '100%'}, uiOption: {dateFormat: 'yy-mm-dd'}, onChange:checkSprintEndDate},
+            { name: 'endDate', display: 'end', type: 'ui-datepicker', ctrlCss: { width: '100%'},uiOption: {dateFormat: 'yy-mm-dd'}, onChange:checkSprintStartDate},
+            { name: 'workload', display: 'Budget', ctrlCss: { width: '100%'},type: 'number'}
             ],
         initData: mydata,
+        
         customRowButtons: [
             {
                 uiButton: { icons: { primary: 'ui-icon-circle-plus' }, label: 'Collapse' },
@@ -85,9 +127,21 @@ $(document).ready(function () {
             subgrid.appendGrid({
                 initRows: 0,
                 hideRowNumColumn: true,
+                maxBodyHeight: 300,
+                maintainScroll: true,
+                hideButtons: {
+                    append:false,
+                    removeLast: true,
+                	remove: false,                    
+                    insert:true,
+                    moveUp:true,
+                    moveDown:true
+                },
+                
                 columns: [
-                    { name: 'name', display: 'task name'},
-                    { name: 'description', display: 'task desc',type:'text', value: 'def desc' },
+                	
+                    { name: 'name', display: 'Name',invisible: false},
+                    { name: 'description', display: 'Descritption',type:'text', value: 'def desc' },
                     { name: 'metric.estimate.wlInf', display: 'wlInf',type: 'select',
                     	ctrlOptions: wlOptions, onChange: checkWLSup, value:1
                     },
@@ -109,9 +163,10 @@ $(document).ready(function () {
                     	ctrlOptions: stateOptions,
                     	value:'NEW'
                     },
-                    { name: 'status.prevState', display: 'prevStatus',type: 'select',                     	
-                    	ctrlOptions: stateOptions,
-                    	value:'NEW'
+                    { name: 'id', display: '#Id',invisible:false},
+                    { name: 'status.prevState', display: 'prevStatus',type: 'text',                     	
+                    	ctrlOptions: stateOptions,ctrlAttr: { 'readonly':true},
+                    	value:'NEW',invisible: true
                     }
                 ]
                 
@@ -140,7 +195,7 @@ $(document).ready(function () {
 							"currentState": cTask['status.currentState'],
 							"upDate": "2001-01-01"
 						},
-						"id": "t1"
+						"id": cTask.id
             	}
             	_resObj.taskList.task.push(taskJson);
             });
@@ -160,12 +215,25 @@ $(document).ready(function () {
                 });
             }
            $(caller).appendGrid('setCtrlValue','workload',rowIndex,sWL); 
+        },
+        dataLoaded: function(caler,records){
+        	$('#btnToggle').click();
         }
         
     });
     
     function showHideSprint(evtObj, uniqueIndex, rowData){
-    	$('#tblSubGridTask_' + uniqueIndex).toggle();
+    	$('#tblSubGridTask_' + uniqueIndex+'-wrapper').toggle();
+    	if(evtObj && evtObj.target){
+    		var _btnText = $(evtObj.target).text();
+    		if(_btnText == 'Hide'){
+    			$(evtObj.target).text('Show');
+    		}else{
+    			$(evtObj.target).text('Hide');
+    		}
+    		
+    	}
+    	
     }
 
     function checkSprintStartDate(evt, rowIndex){
@@ -253,6 +321,8 @@ $(document).ready(function () {
         }
         
     });
+    
+   
 
     
 });
@@ -264,19 +334,20 @@ $(document).ready(function () {
 	</head>
 	<body>
 		<div class="ui-widget-content" style="padding: 12px;">
-		<h:outputText value="#{msg.sprint_project_label}" /><h:inputText id="bbProjName" value="#{projectBeanWrapper.currentProject }"></h:inputText>
 		<h:outputText value="#{msg.project_sdate_label}" /><h:inputText id="bbProjSDate" value="#{projectBeanWrapper.currentProjectStartDate}"></h:inputText>
 		<h:outputText value="#{msg.project_edate_label}" /><h:inputText id="bbProjEDate" value="#{projectBeanWrapper.currentProjectEndDate}"></h:inputText>
-		<h:outputText value="Budget" /><h:inputText id="bbProjWL" value=""></h:inputText>
+		<h:outputText value="Budget:" /><h:outputText id="bbProjWL" value="#{projectBeanWrapper.budjet}"></h:outputText>
 		<table id="tblAppendGrid" style="width:100%"></table>    
 	    <button id="btnSave" type="button">Save</button>
-	    <button id="btnLoad1" type="button">Load from text</button>
+	    <button id="btnLoad1" type="button" style="display:none">Load from text</button>
+	    <input id="btnToggle" value="Show-Hide Cols" type="button"/>
 		</div>
 	<div class="ui-widget-content">	
 	<h:form id="bbForm">
 		<t:outputText value="#{projectBeanWrapper.errorMessage}"	rendered="#{projectBeanWrapper.asError}"	style="color:red;font-weight:bold" />
-		<h:inputTextarea id="beandata"  value="#{projectBeanWrapper.projectPhases}"></h:inputTextarea>
-		<h:commandButton id="bbButonIdPhase" value="SaveToBean"	action="#{projectBeanWrapper.savePhase}" style="display:none"/>
+		<h:inputTextarea id="beandata"  value="#{projectBeanWrapper.projectPhases}" style="display:true"></h:inputTextarea>
+		<h:inputTextarea id="bbCurrentProject"  value="#{projectBeanWrapper.currentProject }" style="display:none"></h:inputTextarea>
+		<h:commandButton id="bbButonIdPhase" value="SaveToBean"	action="#{projectBeanWrapper.savePhase}" style="display:true"/>
 	</h:form>
 	</div>
 	

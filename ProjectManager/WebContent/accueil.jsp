@@ -16,12 +16,12 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.structure.min.css" />
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.theme.min.css" />
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery.appendGrid-1.6.2.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/script/jquery/jquery-ui.structure.min.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/script/jquery/jquery-ui.theme.min.css" />
+<script type="text/javascript"	src="/ProjectManager/script/jquery/jquery-1.11.1.min.js"></script>
+<script type="text/javascript"	src="/ProjectManager/script/jquery/jquery-ui-1.11.1.min.js"></script>
 
-<script type="text/javascript"	src="/ProjectManager/jquery-1.11.1.min.js"></script>
-<script type="text/javascript"	src="/ProjectManager/jquery-ui-1.11.1.min.js"></script>
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery.appendGrid-1.6.2.css" />
 <script type="text/javascript"	src="/ProjectManager/jquery.appendGrid-1.6.2.js"></script>
 
 </head>
@@ -41,6 +41,7 @@
 		<td>
 			<div id="mainmenu">
 			  <ul>	
+			  <li><a href="#About" data-url="/ProjectManager/help/help.faces" class="accueiltabs1">About</a></li>
 			  	<c:forEach items="#{login.menuItems}" var="menuEntry">
 			  		<li>
 			  			<t:htmlTag value="a">
@@ -51,7 +52,7 @@
 						</t:htmlTag>
 			  		</li>
 			  	</c:forEach>
-			    <li><a href="#About" data-url="/ProjectManager/help/help.faces" class="accueiltabs1">About</a></li>    
+			        
 			  </ul>	
 			  <div id="About"></div>		    
 			</div>	
@@ -59,7 +60,7 @@
 		
 	</tr>
 	<tr>
-		<td><iframe id="globalContentFrm" name="globalContentFrm"  style="width: 100%; height: 2000px; border-width: 1;"></iframe></td>
+		<td><iframe id="globalContentFrm" name="globalContentFrm"  style="width: 100%; height: 680px; border-width: 1;"></iframe></td>
 	</tr>
 </tbody>
 </table>

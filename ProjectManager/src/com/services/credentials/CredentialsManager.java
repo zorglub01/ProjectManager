@@ -58,7 +58,7 @@ public class CredentialsManager {
 		// TODO Find out from the DB the profiles of the current user
 		//
 		ArrayList<UserProfile> _res = new ArrayList<UserProfile>();
-		if( currentUser.getLoginName().equalsIgnoreCase("Admin")){
+		if( currentUser.getLoginName().equalsIgnoreCase("Admin") || currentUser.getLoginName().equalsIgnoreCase("Admin2")){
 			UserProfile profile1 = UserProfile.getAdminProfile();
 			_res.add(profile1);
 		}else{

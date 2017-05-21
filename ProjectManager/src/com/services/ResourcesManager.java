@@ -68,7 +68,9 @@ public class ResourcesManager extends HttpCRUDControler {
 	@Override
 	public JsonJtableWrapper loadModel(HttpServletRequest request, JsonJtableWrapper _res) throws JAXBException {
 		String _profileId = request.getParameter("id");
-		UserProfile _res1 = DAOProfile.getInstance().findProfileByName(_profileId);
+		UserProfile _res1 = new UserProfile();
+		_res1.setPrimaryKeyId(_profileId);
+		_res1 = DAOProfile.getInstance().findByPrimaryKey(_res1);
 		for (ProfileURI iterable_element : _res1.getProfile().getResources().getResource()) {
 			_res.getRecords().add(iterable_element);
 		}

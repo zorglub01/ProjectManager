@@ -23,7 +23,7 @@ public class UserProfile implements DBObject {
 	
 	public static final String HTTP_PARAM_ResourcePath="path";
 	
-	private Profile profile;
+	private Profile profile = new Profile();
 	private TreeMap<String,ProfileURI> uriResourceMap=new TreeMap<String,ProfileURI>();
 	/**
 	 * @return the profile
@@ -87,7 +87,9 @@ public class UserProfile implements DBObject {
 	
 	
 	public static UserProfile getAdminProfile() throws JAXBException{
-		UserProfile _res1 = getDAO().findProfileByName("Admin");
+		UserProfile _res1 = new UserProfile();
+		_res1.setPrimaryKeyId("Admin");
+		_res1 = getDAO().findByPrimaryKey(_res1);
 		return _res1 ;
 	}
 	
@@ -105,7 +107,9 @@ public class UserProfile implements DBObject {
 
 	
 	public static UserProfile getDefaultProfile() throws JAXBException{
-		UserProfile _res1 = getDAO().findProfileByName("Default");
+		UserProfile _res1 = new UserProfile();
+		_res1.setPrimaryKeyId("Default");
+		_res1 = getDAO().findByPrimaryKey(_res1);
 		return _res1 ;
 	}
 	public ProfileURI getResourceURI(String _path) {
@@ -131,12 +135,23 @@ public class UserProfile implements DBObject {
 		return _res;
 		
 	}
+
+	/* (non-Javadoc)
+	 * @see com.services.projects.utils.DBObject#getPrimaryKeyId()
+	 */
 	public String getPrimaryKeyId() {
-		return this.getProfileName();
+		return this.getProfile().getName();
 		
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see com.services.projects.utils.DBObject#setPrimaryKeyId(java.lang.String)
+	 */
+	public void setPrimaryKeyId(String _pmKid) {
+		this.getProfile().setName(_pmKid);
+		
+	}
 	
 	
 

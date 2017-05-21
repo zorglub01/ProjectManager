@@ -14,12 +14,12 @@
 	
 	<head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.structure.min.css" />
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.theme.min.css" />
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery.appendGrid-1.6.2.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/script/jquery/jquery-ui.structure.min.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/script/jquery/jquery-ui.theme.min.css" />
+<script type="text/javascript"	src="/ProjectManager/script/jquery/jquery-1.11.1.min.js"></script>
+<script type="text/javascript"	src="/ProjectManager/script/jquery/jquery-ui-1.11.1.min.js"></script>
 
-<script type="text/javascript"	src="/ProjectManager/jquery-1.11.1.min.js"></script>
-<script type="text/javascript"	src="/ProjectManager/jquery-ui-1.11.1.min.js"></script>
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery.appendGrid-1.6.2.css" />
 <script type="text/javascript"	src="/ProjectManager/jquery.appendGrid-1.6.2.js"></script>
 
 <script type="text/javascript">

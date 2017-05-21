@@ -10,13 +10,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Global Admin Setup</title>
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.structure.min.css" />
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery-ui.theme.min.css" />
-<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery.appendGrid-1.6.2.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/script/jquery/jquery-ui.structure.min.css" />
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/script/jquery/jquery-ui.theme.min.css" />
+<script type="text/javascript"	src="/ProjectManager/script/jquery/jquery-1.11.1.min.js"></script>
+<script type="text/javascript"	src="/ProjectManager/script/jquery/jquery-ui-1.11.1.min.js"></script>
 
-<script type="text/javascript"	src="/ProjectManager/jquery-1.11.1.min.js"></script>
-<script type="text/javascript"	src="/ProjectManager/jquery-ui-1.11.1.min.js"></script>
+<link rel="stylesheet" type="text/css"	href="/ProjectManager/jquery.appendGrid-1.6.2.css" />
 <script type="text/javascript"	src="/ProjectManager/jquery.appendGrid-1.6.2.js"></script>
+
 
 <script>
 jQuery(document).ready(function () {
@@ -29,10 +30,10 @@ jQuery(document).ready(function () {
 
 <form id="credAdminForm"action="">
 	<div id="wrap">
-	<table cellspacing="10" cellpadding="10">
+	<table cellspacing="1" cellpadding="1">
 	<tr>
-		<td width="200px" style="vertical-align: top">
-			<div id="credAdminMenu" style="font-size: 75%; height: 600px; width: 240px;">
+		<td width="150px" style="vertical-align: top">
+			<div id="credAdminMenu" style="font-size: 75%; height: 600px; width: 200px;">
 				<h3>Profile and Credentials</h3>
 				<div>
 					<ul>
@@ -40,7 +41,9 @@ jQuery(document).ready(function () {
 							<a href="/ProjectManager/admin/profileview.faces" target="credAdminFrame">Profile setup</a>
 						</li>
 						<li>
-							<a href="/ProjectManager/admin/uploadpage.faces?scope=profile" target="credAdminFrame">Import-Export</a>
+							<a href="/ProjectManager/admin/uploadpage.faces?scope=profile" target="credAdminFrame">
+								<h:outputText value="#{msg.Upload_label }"/>
+							</a>
 						</li>
 					</ul>
 				</div>
@@ -48,10 +51,10 @@ jQuery(document).ready(function () {
 				<div>
 					<ul>
 						<li>
-							<a href="/ProjectManager/admin/profileview.faces" target="credAdminFrame">Profile setup</a>
+							<a href="/ProjectManager/admin/userview.faces" target="credAdminFrame">User setup</a>
 						</li>
 						<li>
-							<a href="/ProjectManager/admin/uploadpage.faces?scope=profile" target="credAdminFrame">Import-Export</a>
+							<a href="/ProjectManager/admin/uploadpage.faces?scope=user" target="credAdminFrame"><h:outputText value="#{msg.Upload_label }"/></a>
 						</li>
 					</ul>
 				</div>
@@ -62,7 +65,7 @@ jQuery(document).ready(function () {
 							<a href="/ProjectManager/admin/projectview.faces" target="credAdminFrame">New Project Setup</a>
 						</li>
 						<li>
-							<a href="/ProjectManager/admin/uploadpage.faces?scope=project" target="credAdminFrame">Import-Export</a>
+							<a href="/ProjectManager/admin/uploadpage.faces?scope=project" target="credAdminFrame"><h:outputText value="#{msg.Upload_label }"/></a>
 						</li>
 					</ul>
 				</div>
@@ -82,8 +85,8 @@ jQuery(document).ready(function () {
 				</div>
 			</div>
 		</td>
-		<td width="1200px" valign="top">
-        	<iframe id="credAdminFrame" name="credAdminFrame"  style="width: 1200px; height: 2000px; border-width: 0;"></iframe>
+		<td valign="top" style="width:100%">
+        	<iframe id="credAdminFrame" name="credAdminFrame"  style="width: 100%; height: 1000px; border-width: 0;"></iframe>
         </td>
 	</tr>
 	</table>
