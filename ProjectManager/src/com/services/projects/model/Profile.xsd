@@ -55,4 +55,25 @@
     		<element name="resource" type="tns:profileURI" maxOccurs="unbounded" minOccurs="1"></element>
     	</sequence>
     </complexType>
+
+    <element name="User" >
+    <complexType>
+		<choice>
+		<sequence>
+			<element name="eMail" type="string" maxOccurs="1"
+				minOccurs="1">
+			</element>
+			<element name="password" type="string" maxOccurs="1"
+				minOccurs="1">
+			</element>
+			<element name="FirstName" type="string" maxOccurs="1"
+				minOccurs="1">
+			</element>
+			<element ref="tns:Profile" maxOccurs="unbounded" minOccurs="1"></element>
+		</sequence>
+		</choice>
+		<attribute name="KeyId" type="string"></attribute>
+		<attribute name="login" type="string"></attribute>
+	</complexType>
+    </element>
 </schema>

@@ -7,14 +7,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import com.services.projects.model.Phases;
 import com.services.projects.model.Project;
 import com.services.projects.model.Sprint;
 import com.services.projects.utils.DBObject;
+import com.services.projects.utils.ModelManagerHelper;
 
 /**
  * @author thomas
@@ -59,15 +59,6 @@ public class JsonProjectWrapper implements DBObject {
 	}
 
 	
-	public String getShortName(){
-		return this.getProject().getShortName();
-	}
-	
-
-	public void setShortName(String _val){
-		this.getProject().setShortName(_val);
-	}
-	
 	public String getDescription(){
 		return this.getProject().getDescription();
 	}
@@ -91,13 +82,27 @@ public class JsonProjectWrapper implements DBObject {
 	}
 
 	public String getPrimaryKeyId() {
-		return this.getShortName();
+		return this.getProject().getShortName();
+	}
+	
+	public void setPrimaryKeyId(String _pmKid) {
+		
+		this.getProject().setShortName(_pmKid);
 	}
 
 	public void setProject(Project _res) {
 		this.oProject = _res;
 		
 	}
+	
+	public String getShortName(){
+		return this.getPrimaryKeyId();
+	}
+	
+	public void setShortName(String _str){
+		this.setPrimaryKeyId(_str);
+	}
+	
 
 	/**
 	 * @return the startDate
@@ -105,7 +110,13 @@ public class JsonProjectWrapper implements DBObject {
 	
 	public XMLGregorianCalendar getStartDate() {
 		Sprint _fSprint = this.getFirstSprint();
-		if(_fSprint !=null) this.startDate = _fSprint.getStartDate();
+		if(this.startDate == null && _fSprint !=null ){
+			this.setStartDate( _fSprint.getStartDate());
+		}else if(this.startDate != null && _fSprint !=null ){
+			if( this.startDate.compare(_fSprint.getStartDate()) == DatatypeConstants.GREATER){
+				this.setStartDate(_fSprint.getStartDate());
+			}
+		}
 		return this.startDate;
 	}
 
@@ -113,7 +124,7 @@ public class JsonProjectWrapper implements DBObject {
 	 * @param startDate the startDate to set
 	 */
 	public void setStartDate(XMLGregorianCalendar startDate) {
-		this.startDate = startDate;
+		this.startDate = ModelManagerHelper.formatXMLGregorianCalendar(startDate);
 	}
 
 	/**
@@ -122,8 +133,14 @@ public class JsonProjectWrapper implements DBObject {
 	
 	public XMLGregorianCalendar getEndDate() {
 		Sprint _fSprint = this.getLastSprint();
-		if( _fSprint !=null)
-			this.endDate = _fSprint.getEndDate();
+		if(this.endDate == null && _fSprint !=null){
+			this.setEndDate(_fSprint.getEndDate());
+		}else if(this.endDate != null && _fSprint !=null){
+			if(this.endDate.compare(_fSprint.getEndDate()) == DatatypeConstants.LESSER){
+				this.setEndDate(_fSprint.getEndDate());
+			}
+		}
+		
 		return this.endDate;
 	}
 
@@ -131,7 +148,7 @@ public class JsonProjectWrapper implements DBObject {
 	 * @param endDate the endDate to set
 	 */
 	public void setEndDate(XMLGregorianCalendar endDate) {
-		this.endDate = endDate;
+		this.endDate = ModelManagerHelper.formatXMLGregorianCalendar(endDate);
 	}
 	
 	
@@ -140,8 +157,10 @@ public class JsonProjectWrapper implements DBObject {
 		Sprint _res = null;
 		if(_p != null){
 			List<Sprint> _sP = _p.getPhase();
+			if(!_sP.isEmpty()){
 			Collections.sort(_sP, new SprintStartDateSorter());
 			_res = _sP.get(0);
+			}
 		}
 		return _res;
 	}
@@ -152,8 +171,10 @@ public class JsonProjectWrapper implements DBObject {
 		Sprint _res = null;
 		if(_p != null){
 			List<Sprint> _sP = _p.getPhase();
+			if(!_sP.isEmpty()){
 			Collections.sort(_sP, new SprintEndDateSorter());
 			_res = _sP.get(_sP.size()-1);
+			}
 		}		
 		return _res;
 	}

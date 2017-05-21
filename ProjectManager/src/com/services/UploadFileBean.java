@@ -18,6 +18,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.myfaces.custom.fileupload.UploadedFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.services.credentials.DAOUser;
 import com.services.credentials.profiles.DAOProfile;
 import com.services.projects.bean.DAOProject;
 
@@ -43,6 +44,8 @@ public class UploadFileBean {
 				_res = DAOProfile.getInstance().scanDbFile();
 			}else if (DAOProject.getInstance().getHTTP_UPLOAD_PARAM_VAL().equalsIgnoreCase(_scope)) {
 				_res = DAOProject.getInstance().scanDbFile();
+			}else if(DAOUser.getInstance().getHTTP_UPLOAD_PARAM_VAL().equalsIgnoreCase(_scope)) {
+				_res = DAOUser.getInstance().scanDbFile();
 			}
 			
 		}catch (JsonProcessingException e) {

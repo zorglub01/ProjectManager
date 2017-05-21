@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:User KeyId="Admin" login="Admin" xmlns:tns="http://www.example.org/Profile"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.example.org/Profile Profile.xsd ">
+	<tns:eMail><![CDATA[Admin@mail.com]]></tns:eMail>
+	<tns:password><![CDATA[MyPwd]]></tns:password>
+	<tns:FirstName>Admin</tns:FirstName>
+	<tns:Profile KeyId="1" Name="Admin" >
+	<tns:Resources>
+    <tns:resource>
+      <tns:Credentials>
+        <tns:rights>CREATE</tns:rights>
+        <tns:rights>READ</tns:rights>
+        <tns:rights>UPDATE</tns:rights>
+        <tns:rights>DELETE</tns:rights>
+      </tns:Credentials>      
+      <tns:Path>/ProjectManager/admin/credAdmin.faces</tns:Path>
+      <tns:Description>Admin page</tns:Description>
+    </tns:resource>
+    <tns:resource>
+      <tns:Credentials>
+        <tns:rights>CREATE</tns:rights>
+        <tns:rights>READ</tns:rights>
+        <tns:rights>UPDATE</tns:rights>
+        <tns:rights>DELETE</tns:rights>
+      </tns:Credentials>      
+      <tns:Path>/ProjectManager/project/projectAdmin.faces</tns:Path>
+      <tns:Description>Project page</tns:Description>
+    </tns:resource>
+    <tns:resource>
+      <tns:Credentials>
+        <tns:rights>CREATE</tns:rights>
+        <tns:rights>READ</tns:rights>
+        <tns:rights>UPDATE</tns:rights>
+        <tns:rights>DELETE</tns:rights>
+      </tns:Credentials>      
+      <tns:Path>/ProjectManager/sample1/sample.html</tns:Path>
+      <tns:Description>Project page</tns:Description>
+    </tns:resource>
+  </tns:Resources>
+  <tns:Description>Admin profile setup</tns:Description>
+</tns:Profile>
+	</tns:User>

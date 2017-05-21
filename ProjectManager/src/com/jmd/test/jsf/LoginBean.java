@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBException;
 
 import com.services.credentials.CredentialsManager;
+import com.services.credentials.DAOUser;
 import com.services.credentials.profiles.DAOProfile;
 import com.services.projects.bean.DAOProject;
 
@@ -65,6 +66,7 @@ public class LoginBean {
 	  try {
 		DAOProfile.getInstance(_rootPathApp);
 		DAOProject.getInstance(_rootPathApp);
+		DAOUser.getInstance(_rootPathApp);
 		this.menuItems = CredentialsManager.getMenuEntry(session,this);
 	} catch (URISyntaxException e) {
 		// TODO Auto-generated catch block

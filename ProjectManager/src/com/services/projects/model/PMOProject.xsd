@@ -3,12 +3,16 @@
 	targetNamespace="http://www.example.org/PMOProject"
 	xmlns:tns="http://www.example.org/PMOProject"
 	elementFormDefault="qualified"
-	xmlns:pref="http://www.example.org/PMOTask" xmlns:pref1="http://www.example.org/Profile">
+	xmlns:pref="http://www.example.org/PMOTask"
+	xmlns:pref1="http://www.example.org/Profile">
 	<import schemaLocation="PMOTask.xsd"
 		namespace="http://www.example.org/PMOTask">
 	</import>
 
-	<import schemaLocation="Profile.xsd" namespace="http://www.example.org/Profile"></import>
+	<import schemaLocation="Profile.xsd"
+		namespace="http://www.example.org/Profile">
+	</import>
+	
 	<element name="Project">
 		<complexType>
 			<choice>
@@ -48,8 +52,8 @@
 				<element name="name" type="string"></element>
 				<element name="startDate" type="date"></element>
 				<element name="endDate" type="date"></element>
-				<element name="taskList" type="tns:tasks"
-					maxOccurs="1" minOccurs="1">
+				<element name="taskList" type="tns:tasks" maxOccurs="1"
+					minOccurs="1">
 				</element>
 			</sequence>
 		</choice>

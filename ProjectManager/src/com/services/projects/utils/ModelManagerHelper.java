@@ -12,8 +12,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -21,9 +24,15 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.codehaus.jettison.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -31,6 +40,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.services.JsonJtableWrapper;
@@ -38,6 +48,7 @@ import com.services.projects.bean.JsonProjectWrapper;
 import com.services.projects.model.Profile;
 import com.services.projects.model.Project;
 import com.services.projects.model.Task;
+import com.services.projects.model.User;
 
 /**
  * @author thomas.foret
@@ -88,6 +99,8 @@ public class ModelManagerHelper{
 	
 	public static <T> T getObjectFromJson(String jsonInString,Class<T> clazz) throws JsonParseException, JsonMappingException, IOException{
 		ObjectMapper mymapper = new ObjectMapper();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		mymapper.setDateFormat(df);
 		mymapper.setVisibility(PropertyAccessor.GETTER, Visibility.PROTECTED_AND_PUBLIC);
 		
 		T _res = (T)mymapper.readValue(jsonInString, clazz);
@@ -103,6 +116,7 @@ public class ModelManagerHelper{
 		List<T> _res = mymapper.readValue(jsonInString, _colType);
 		return _res;
 	}
+	
 	
 	
 	public static String getJsonStream(Object _object) throws JsonProcessingException{
@@ -165,9 +179,10 @@ public class ModelManagerHelper{
 	
 
 	public static void main(String args[]){
-		URL taskXmlUrl = ClassLoader.getSystemResource("com/services/projects/model/PMOTask.xml");
+		URL taskXmlUrl = ClassLoader.getSystemResource("com/services/projects/model/PMOTask1.xml");
 		URL profileXmlUrl = ClassLoader.getSystemResource("com/services/projects/model/Profile.xml");
-		URL pmoXmlUrl = ClassLoader.getSystemResource("com/services/projects/model/PMOProject1.xml");
+		URL pmoXmlUrl = ClassLoader.getSystemResource("com/services/projects/model/project_Default.xml");
+		URL userXmlUrl = ClassLoader.getSystemResource("com/services/projects/model/user_Default.xml");
 		
 		testProject(pmoXmlUrl);
 		
@@ -175,11 +190,30 @@ public class ModelManagerHelper{
 		
 		testProfile(profileXmlUrl);
 		
+		testUser(userXmlUrl);
+		
+		
 		testFileScan();
 		
 		testJsonMessage();
+		
+		testDateOperation();
 	}
 	
+	
+
+	private static void testDateOperation() {
+		LocalDate _sDate = LocalDate.now();
+		System.out.println("_SDate : " + _sDate );
+		LocalDate _eDate = _sDate .plusDays(0);
+		System.out.println("_SDate + 0: " + _eDate );
+		_eDate = _sDate .plusDays(1);
+		System.out.println("_SDate + 1: " + _eDate );
+		_eDate = _sDate .plusDays(20);
+		System.out.println("_SDate + 20: " + _eDate );
+		
+	}
+
 	private static void testJsonMessage(){
 		System.out.println("TESTING JSON ARRAY to OBJECT");
 		
@@ -221,6 +255,25 @@ public class ModelManagerHelper{
 		
 	}
 
+	/**
+	 * @param pmoXmlUrl
+	 */
+	private static void testUser(URL userXmlUrl) {
+		try {
+			File _testFile2 = new File(userXmlUrl.toURI());									
+			User _res2 = ModelManagerHelper.<User>loadModel(_testFile2, User.class);
+			System.out.println(_res2);			
+			ModelManagerHelper.<User>saveModel(_res2);
+
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 
 	/**
 	 * @param pmoXmlUrl
@@ -294,7 +347,92 @@ public class ModelManagerHelper{
 			e.printStackTrace();
 		}
 	}
+
+	public static LocalDate convertToLocalDate(XMLGregorianCalendar _date) {
+		LocalDate _res=null;
+		if(_date != null ){
+			_res = LocalDate.of(_date.getYear(),_date.getMonth(), _date.getDay());
+		}
+		return _res;
+	}
+
+	public static XMLGregorianCalendar convertToXmlGregorianCalendar(LocalDate _date){
+		XMLGregorianCalendar _res=null;
+		try {
+			DatatypeFactory df = DatatypeFactory.newInstance();
+			_res = df.newXMLGregorianCalendarDate(_date.getYear(), _date.getMonthValue(), _date.getDayOfMonth(), DatatypeConstants.FIELD_UNDEFINED);
+	    } catch (DatatypeConfigurationException dce) {
+	        throw new IllegalStateException(
+	            "Exception while obtaining DatatypeFactory instance", dce);
+	    }
+		
+		return _res;
+	}
 	
+	public static XMLGregorianCalendar formatXMLGregorianCalendar(XMLGregorianCalendar _date){
+		XMLGregorianCalendar _res=null;
+		try {
+			DatatypeFactory df = DatatypeFactory.newInstance();
+			_res = df.newXMLGregorianCalendarDate(_date.getYear(), _date.getMonth(), _date.getDay(), DatatypeConstants.FIELD_UNDEFINED);
+	    } catch (DatatypeConfigurationException dce) {
+	        throw new IllegalStateException(
+	            "Exception while obtaining DatatypeFactory instance", dce);
+	    }
+		
+		return _res;
+	}
+	
+	
+	
+	public static JsonNode convertAsJsonNode(String _jsonString){
+		JsonNode _res=null;
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			_res = mapper.readTree(_jsonString);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return _res;
+	}
+
+	/**
+	 * @param rootCtxPath
+	 */
+	public static String initUrlDbPath(String rootCtxPath, String dbPathREl) {
+		String _res = null;
+		String _endSep = "";
+		if (!rootCtxPath.endsWith("/"))
+			_endSep = "/";
+		_res = rootCtxPath + _endSep + dbPathREl;
+		return _res;
+	}
+
+	/**
+	 * @param rootCtxPath
+	 */
+	public static DBManager initDaoInstance(String rootCtxPath, DBManager instance) {
+		String _dbPath = initUrlDbPath(rootCtxPath, instance.getDBPath());
+		instance.setUrlDbPath(_dbPath);
+		Path folder = Paths.get(instance.getUrlDbPath());
+		@SuppressWarnings("unchecked")
+		Collection<File> _files = FileUtils.listFiles(folder.toFile(), TrueFileFilter.INSTANCE,
+				TrueFileFilter.INSTANCE);
+		for (File file : _files) {
+			System.out.println(file.getPath());
+			String _name = FilenameUtils.getBaseName(file.getName());
+			String _ext = FilenameUtils.getExtension(file.getName());
+			if (_ext.equalsIgnoreCase("xml") && _name.startsWith(instance.getHTTP_UPLOAD_PARAM_VAL()+ "_")) {
+				String[] _tmp = _name.split("_");
+				instance.getRepository().put(_tmp[1], Paths.get(file.toURI()));
+			}
+	
+		}
+		return instance;
+	}
 	
 	
 

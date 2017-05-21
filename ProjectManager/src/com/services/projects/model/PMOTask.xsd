@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://www.example.org/PMOTask"
-	xmlns:tns="http://www.example.org/PMOTask"
-	elementFormDefault="qualified">
-	<import></import>
+	xmlns:tns="http://www.example.org/PMOTask">
 	<element name="Task">
 		<complexType>
-		<choice>
-			<sequence>
-				<element name="Name" type="string" maxOccurs="1"
-					minOccurs="1">
-				</element>
-				<element ref="tns:Description" maxOccurs="1"
-					minOccurs="1">
-				</element>
-				<element ref="tns:Metric" maxOccurs="1" minOccurs="1"></element>
-				<element name="Status" type="tns:status" maxOccurs="1" minOccurs="1"></element>
-			</sequence>
+			<choice>
+				<sequence>
+					<element name="Name" type="string" maxOccurs="1"
+						minOccurs="1">
+					</element>
+					<element ref="tns:Description" maxOccurs="1"
+						minOccurs="1">
+					</element>
+					<element ref="tns:Metric" maxOccurs="1"
+						minOccurs="1">
+					</element>
+					<element name="Status" type="tns:status"
+						maxOccurs="1" minOccurs="1">
+					</element>
+
+                    <element name="TrackEntries" type="tns:TrackEntriesType" maxOccurs="1" minOccurs="1"></element>
+                </sequence>
+
 			</choice>
 			<attribute name="Id" type="string" use="required" />
 		</complexType>
@@ -24,11 +29,11 @@
 
 	<element name="Metric">
 		<complexType>
-		<choice>
-			<sequence>
-				<element ref="tns:Description"></element>
-				<element name="estimate" type="tns:wl"></element>
-			</sequence>
+			<choice>
+				<sequence>
+					<element ref="tns:Description"></element>
+					<element name="estimate" type="tns:wl"></element>
+				</sequence>
 			</choice>
 			<attribute ref="tns:keyId"></attribute>
 		</complexType>
@@ -44,13 +49,13 @@
 
 
 	<complexType name="wl">
-	<choice>
-		<sequence>
-			<element name="wlSup" type="int"></element>
-			<element name="wlInf" type="int"></element>
-			<element name="startDate" type="date"></element>
-			<element name="endDate" type="date"></element>
-		</sequence>
+		<choice>
+			<sequence>
+				<element name="wlSup" type="int"></element>
+				<element name="wlInf" type="int"></element>
+				<element name="startDate" type="date"></element>
+				<element name="endDate" type="date"></element>
+			</sequence>
 		</choice>
 	</complexType>
 
@@ -63,15 +68,48 @@
 			<enumeration value="InProgress"></enumeration>
 			<enumeration value="Closed"></enumeration>
 			<enumeration value="Rejected"></enumeration>
-			<enumeration value="Suspended"></enumeration>
+			<enumeration value="Pending"></enumeration>
 		</restriction>
 	</simpleType>
 
 
 	<complexType name="status">
+		<attribute name="prevState" type="tns:state" default="New"
+			form="qualified">
+		</attribute>
 		<attribute name="currentState" type="tns:state" default="New"
 			form="qualified">
 		</attribute>
 		<attribute name="upDate" type="date"></attribute>
 	</complexType>
+	
+	
+
+  
+	
+
+    <complexType name="TrackVector">
+    	<sequence>
+    		<element name="ProgressFactor" type="double" maxOccurs="1" minOccurs="1"></element>
+    		<element name="TaskOwner" type="string" maxOccurs="1" minOccurs="1"></element>
+    		<element name="TrackTime" type="date" maxOccurs="1" minOccurs="1"></element>
+    	</sequence>
+    </complexType>
+
+   
+	
+	
+
+    <complexType name="TrackEntriesType">
+    	<sequence>
+    		<element name="ProgressLine" type="tns:TimeLineType" maxOccurs="1" minOccurs="1"></element>
+    		<element name="BudgetLine" type="tns:TimeLineType" maxOccurs="1" minOccurs="1"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="TimeLineType">
+    	<sequence>
+    		<element name="Track" type="tns:TrackVector" maxOccurs="unbounded" minOccurs="1"></element>
+    	</sequence>
+    </complexType>
 </schema>

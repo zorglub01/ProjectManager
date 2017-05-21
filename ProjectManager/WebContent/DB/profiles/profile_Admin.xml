@@ -18,7 +18,17 @@
         <tns:rights>UPDATE</tns:rights>
         <tns:rights>DELETE</tns:rights>
       </tns:Credentials>      
-      <tns:Path>/ProjectManager/project/projAdmin.faces</tns:Path>
+      <tns:Path>/ProjectManager/project/projectAdmin.faces</tns:Path>
+      <tns:Description>Project page</tns:Description>
+    </tns:resource>
+    <tns:resource>
+      <tns:Credentials>
+        <tns:rights>CREATE</tns:rights>
+        <tns:rights>READ</tns:rights>
+        <tns:rights>UPDATE</tns:rights>
+        <tns:rights>DELETE</tns:rights>
+      </tns:Credentials>      
+      <tns:Path>/ProjectManager/sample1/sample.html</tns:Path>
       <tns:Description>Project page</tns:Description>
     </tns:resource>
   </tns:Resources>

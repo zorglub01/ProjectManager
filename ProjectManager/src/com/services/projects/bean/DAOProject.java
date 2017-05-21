@@ -3,7 +3,6 @@
  */
 package com.services.projects.bean;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -11,19 +10,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.TreeMap;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.services.credentials.profiles.UserProfile;
+import com.services.projects.model.Phases;
 import com.services.projects.model.Project;
+import com.services.projects.model.Sprint;
 import com.services.projects.utils.DBManager;
 import com.services.projects.utils.ModelManagerHelper;
 
@@ -31,7 +27,7 @@ import com.services.projects.utils.ModelManagerHelper;
  * @author thomas
  *
  */
-public class DAOProject implements DBManager {
+public class DAOProject implements DBManager<JsonProjectWrapper> {
 	private static final String PROJECT_DEFAULT = "Default";
 	private static final String HTTP_UPLOAD_PARAM_VAL = "project";
 	/**
@@ -68,38 +64,10 @@ public class DAOProject implements DBManager {
 			return instance;
 		} else {
 			instance = new DAOProject();
-			urlDbPath = initUrlDbPath(rootCtxPath, DB_PATH);
-			repository = new TreeMap<String, Path>();
-			System.out.println(urlDbPath);
-			Path folder = Paths.get(urlDbPath);
-			@SuppressWarnings("unchecked")
-			Collection<File> _files = FileUtils.listFiles(folder.toFile(), TrueFileFilter.INSTANCE,
-					TrueFileFilter.INSTANCE);
-			for (File file : _files) {
-				System.out.println(file.getPath());
-				String _name = FilenameUtils.getBaseName(file.getName());
-				String _ext = FilenameUtils.getExtension(file.getName());
-				if (_ext.equalsIgnoreCase("xml") && _name.startsWith(HTTP_UPLOAD_PARAM_VAL + "_")) {
-					String[] _tmp = _name.split("_");
-					repository.put(_tmp[1], Paths.get(file.toURI()));
-				}
-
-			}
+			instance = (DAOProject)ModelManagerHelper.initDaoInstance(rootCtxPath,instance);
 
 		}
 		return instance;
-	}
-
-	/**
-	 * @param rootCtxPath
-	 */
-	private static String initUrlDbPath(String rootCtxPath, String dbPathREl) {
-		String _res = null;
-		String _endSep = "";
-		if (!rootCtxPath.endsWith("/"))
-			_endSep = "/";
-		_res = rootCtxPath + _endSep + DB_PATH;
-		return _res;
 	}
 
 	public static DAOProject getInstance() {
@@ -111,7 +79,7 @@ public class DAOProject implements DBManager {
 			try {
 				this.saveProject(_project);
 			} catch (JAXBException e) {
-				System.out.println("Project saved Failed:" + _project.getShortName());
+				System.out.println("Project saved Failed:" + _project.getPrimaryKeyId());
 			}
 		}
 
@@ -130,6 +98,14 @@ public class DAOProject implements DBManager {
 		_res = (_tmp != null);
 		return _res;
 	}
+	
+
+	public JsonProjectWrapper findByPrimaryKey(JsonProjectWrapper _obj) {
+		// TODO Auto-generated method stub
+		return this.findProjectByName(_obj.getPrimaryKeyId());
+	}
+	
+	
 
 	/**
 	 * Return a JsonWrapperProject
@@ -138,7 +114,7 @@ public class DAOProject implements DBManager {
 	 * @return JsonWrapperProject or null if not existing or not registered
 	 * @throws JAXBException
 	 */
-	public JsonProjectWrapper findProjectByName(String _name) {
+	private JsonProjectWrapper findProjectByName(String _name) {
 		JsonProjectWrapper _res = null;
 		Path _uriFile = repository.get(_name);
 		if (_uriFile != null && _uriFile.toFile().exists()) {
@@ -157,22 +133,33 @@ public class DAOProject implements DBManager {
 
 	public void saveProject(JsonProjectWrapper _project) throws JAXBException {
 		JsonProjectWrapper  _tmpProject = null;		
-		if(this.isProjectExist(_project.getShortName())){
-			_tmpProject = this.findProjectByName(_project.getShortName());					
+		if(this.isProjectExist(_project.getPrimaryKeyId())){
+			_tmpProject = this.findProjectByName(_project.getPrimaryKeyId());					
 		}else{
 			_tmpProject = this.findProjectByName(PROJECT_DEFAULT);
 			String _shortName = this.getGeneratedShortName(_project);
-			_tmpProject.setShortName(_shortName);
+			_tmpProject.setPrimaryKeyId(_shortName);
 			_tmpProject.setKeyId(_shortName);
 		}
 		_tmpProject.setName(_project.getName());
 		_tmpProject.setDescription(_project.getDescription());
-		_tmpProject.getFirstSprint().setStartDate(_project.getStartDate());
-		_tmpProject.getLastSprint().setEndDate(_project.getEndDate());
+		Phases _newProjPhases = _project.getProject().getPhases();
+		if(_newProjPhases != null){
+			List<Sprint> _SprintList = _newProjPhases.getPhase();
+			List<Sprint> _oldSprints = _tmpProject.getProject().getPhases().getPhase();
+			List<Sprint> _newSprints = ProjectService.updateSprints(_oldSprints, _SprintList);
+			
+			_tmpProject.getProject().getPhases().getPhase().clear();
+			_tmpProject.getProject().getPhases().getPhase().addAll(_newSprints);
+			
+		}
+		if(_project.getStartDate()!=null)	_tmpProject.getFirstSprint().setStartDate(_project.getStartDate());
+		if(_project.getEndDate() !=null)	_tmpProject.getLastSprint().setEndDate(_project.getEndDate());
+		
 		
 		Path _fileToSave = ModelManagerHelper.getFilePath(_tmpProject, this);
 		ModelManagerHelper.<Project>saveModel(_tmpProject.getProject(),_fileToSave.toFile()); 
-		repository.put(_tmpProject.getShortName(), _fileToSave);
+		repository.put(_tmpProject.getPrimaryKeyId(), _fileToSave);
 		System.out.println(_fileToSave);
 
 	}
@@ -182,6 +169,8 @@ public class DAOProject implements DBManager {
 		_res = _project.getName();
 		_res = _res.replaceAll(" ", "");
 		_res = _res.replaceAll("_", "");
+		_res = _res.replaceAll(".", "");
+		
 		Integer _int = new Integer(0);
 		while(this.isProjectExist(_res)){
 			_res += _int++;
@@ -231,18 +220,45 @@ public class DAOProject implements DBManager {
 			_pTmp = this.findProjectByName(PROJECT_DEFAULT);
 		}
 		_pTmp.setProject(_res);
-		this.saveProject(_pTmp);
+		
+		Path _fileToSave = ModelManagerHelper.getFilePath(_pTmp, this);
+		ModelManagerHelper.<Project>saveModel(_pTmp.getProject(),_fileToSave.toFile()); 
+		repository.put(_pTmp.getPrimaryKeyId(), _fileToSave);
+		System.out.println(_fileToSave);
 		Files.deleteIfExists(_fileTmp);
 	}
 
-	public <T> List<T> getRegisteredObjects(Class<T> t) {
-		ArrayList<JsonProjectWrapper> _res = new ArrayList<JsonProjectWrapper>();
+	
+	public List<JsonProjectWrapper> getRegisteredObjects() {
+		List<JsonProjectWrapper> _res = new ArrayList<JsonProjectWrapper>();
 		for (String profilename : repository.keySet()) {
 			JsonProjectWrapper _tmp = this.findProjectByName(profilename);
 			_res.add(_tmp);
 		}
-		return (List<T>) _res;
+		return _res;
 	}
+
+	public void setUrlDbPath(String _dbPath) {
+		// TODO Auto-generated method stub
+		DAOProject.urlDbPath=_dbPath;
+		System.out.println(DAOProject.urlDbPath);
+	}
+
+	public TreeMap<String, Path> getRepository() {
+		if(DAOProject.repository == null){
+			DAOProject.repository = new TreeMap<String, Path>();
+		}
+		return DAOProject.repository;
+	}
+
+	/** 
+	 * @see com.services.projects.utils.DBManager#getDBPath()
+	 */
+	public String getDBPath() {
+		// TODO Auto-generated method stub
+		return DAOProject.DB_PATH;
+	}
+
 
 	
 

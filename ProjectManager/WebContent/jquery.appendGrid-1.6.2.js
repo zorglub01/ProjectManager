@@ -1419,7 +1419,9 @@
                 // Set data
                 for (var r = 0; r < insertResult.addedRows.length; r++) {
                     for (var c = 0; c < settings.columns.length; c++) {
-                        setCtrlValue(settings, c, settings._rowOrder[r], records[r][settings.columns[c].name]);
+                    	var cColName = settings.columns[c].name;
+                    	var cData = eval('records['+r+']'+'.'+cColName);
+                        setCtrlValue(settings, c, settings._rowOrder[r], cData);
                     }
                     if ($.isFunction(settings.rowDataLoaded)) {
                         settings.rowDataLoaded(tbWhole, records[r], r, settings._rowOrder[r]);
